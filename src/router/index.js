@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login'
-import Header from '@/components/header'
+import ManagerIndex from '@/components/managerIndex'
+import TeacherIndex from '@/components/teacherIndex'
+import StudentIndex from '@/components/studentIndex'
+import ManManage from '@/components/pages/manManage'
+import TeaManage from '@/components/pages/teaManage'
+import StuManage from '@/components/pages/stuManage'
 import Wrap from '@/components/wrap'
 import HomePage from '@/components/homePage'
 Vue.use(Router)
@@ -15,7 +20,27 @@ export default new Router({
       path: '/login',name: '登录',component: Login,
     },
     {
-      path: '/header',name: '',component: Header,
+      path: '/managerIndex',name: '',component: ManagerIndex,
+      children:[
+        {
+          path:'/managerIndex/manManage',
+          component:ManManage
+        },
+        {
+          path:'/managerIndex/teaManage',
+          component:TeaManage
+        },
+        {
+          path:'/managerIndex/stuManage',
+          component:StuManage
+        },
+      ]
+    },
+    {
+      path: '/teacherIndex',name: '',component: TeacherIndex,
+    },
+    {
+      path: '/studentIndex',name: '',component: StudentIndex,
     },
     // {
     //   path: '/',name: '',redirect:"/wrap",

@@ -23,71 +23,49 @@
             </el-header>
             <el-container>
                 <el-aside width="120px">
-                    <!-- <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose">
-                    <el-submenu index="1">
-                        <template slot="title">
-                        <i class="el-icon-tickets" style="padding-left: 9px;"></i>
-                        <span class="span1">业务运营</span>
-                        </template>
-                        <el-menu-item-group>
-                        <el-menu-item index="1-1" class="child-li">
-                            <router-link to="/index/roadlist">出行周边</router-link>
-                        </el-menu-item>
-                        <el-menu-item index="1-2" class="child-li">
-                            <router-link to="/index/protolist">协议管理</router-link>
+                    <el-menu class="el-menu-vertical-demo" @select="gopath">
+                        <template v-for="(item,index) in menuList">
+                            <template>
+                            <el-menu-item :index="item.menuI">
+                                <i :class="item.menuImages"></i>
+                                <span class="sidemenu-text">{{ item.menuName }}</span>
                             </el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
-                    <el-menu-item index="2" style="padding-left: 6px;">
-                        <i class="el-icon-setting" style="margin-top: 4px;"></i>
-                        <span slot="title" class="span2">
-                            <router-link to="/index/systemlist">系统管理</router-link>
-                        </span>
-                    </el-menu-item>
-                    </el-menu> -->
+                            </template>
+                        </template>
+                    </el-menu>
                 </el-aside>
-                <el-main>
-                    <div class="main_table">
-                        <router-view></router-view>
-                    </div>
-                </el-main>
             </el-container>
         </el-container>
     </div>
 </template>
 <script>
-  export default {
+export default {
+    props:['menuList'],
     methods: {
-    //   handleOpen(key, keyPath) {
-    //     console.log(key, keyPath);
-    //   },
-    //   handleClose(key, keyPath) {
-    //     console.log(key, keyPath);
-    //   },
-     handleCommand(command) {
+    gopath(url) {
+      //路由跳转
+        this.$router.push(url)
+    },
+    handleCommand(command) {
         if(command == 'logOut'){
-           this.$confirm('此操作将退出登录, 是否继续?', '退出提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {    
-              localStorage.clear();       
-              sessionStorage.clear();
+            this.$confirm('此操作将退出登录, 是否继续?', '退出提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {    
+                localStorage.clear();       
+                sessionStorage.clear();
 
-              this.$router.push('/');
-              
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '操作已取消！'
-              });          
-            });
+                this.$router.push('/');
+                
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '操作已取消！'
+                });          
+                });
+            }
         }
-      }
     }
-  }
+}
 </script>
