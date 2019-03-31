@@ -1,0 +1,38 @@
+.login-header {
+    width: 100%;
+    height: 100vh;
+    .logobg-img {
+        width: 100%;
+        height: 100%;
+        .login-logo {
+            float: left;
+            margin-top: 40px;
+            margin-left: 20px;
+        }
+        .login-title {
+            margin-top: 64px;
+            padding-left: 26px;
+            font-size: 32px;
+            color: #007dbf;
+            float: left;
+        }
+        .login-content{
+            width: 20%;
+            min-width: 300px;
+            clear: both;
+            position: absolute;
+            top: 32%;
+            margin-left: 50px;
+        }
+    }
+}
+// 获取宽度百分比
+.autoWid(@wid,@pwid){
+    @myvar: ((@wid/@pwid)*100);
+    width: ~"@{myvar}%";
+}
+// 获取高度百分比
+.autoHei(@hei,@phei){
+    @myvar: ((@hei/@phei)*100);
+    height: ~"@{myvar}%";
+}  
