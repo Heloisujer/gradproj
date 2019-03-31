@@ -16,11 +16,11 @@ export default {
         return {        
             listData:[
                 {menuI:'/managerIndex/manManage',menuName:'管理员管理',menuImages: "el-icon-news"},
-                {menuI:'/managerIndex/teaManage',menuName:'导师管理',menuImages: "el-icon-date"},
+                {menuI:'/managerIndex/teaManage',menuName:'导师管理',menuImages: "el-icon-printer"},
                 {menuI:'/managerIndex/stuManage',menuName:'学生管理',menuImages: "el-icon-document"},
-                {menuI:'4',menuName:'院系管理',menuImages: "el-icon-rank"},
-                {menuI:'5',menuName:'课题管理',menuImages: "el-icon-edit-outline"},
-                {menuI:'6',menuName:'系统设置',menuImages: "el-icon-setting"}
+                {menuI:'/managerIndex/departManage',menuName:'院系管理',menuImages: "el-icon-rank"},
+                {menuI:'/managerIndex/topicManage',menuName:'课题管理',menuImages: "el-icon-edit-outline"},
+                {menuI:'/managerIndex/systemManage',menuName:'系统设置',menuImages: "el-icon-setting"}
             ]
         }
     },

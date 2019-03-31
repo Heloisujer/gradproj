@@ -7,6 +7,9 @@ import StudentIndex from '@/components/studentIndex'
 import ManManage from '@/components/pages/manManage'
 import TeaManage from '@/components/pages/teaManage'
 import StuManage from '@/components/pages/stuManage'
+import TopicManage from '@/components/pages/topicManage'
+import SystemManage from '@/components/pages/systemManage'
+import DepartManage from '@/components/pages/departManage'
 import Wrap from '@/components/wrap'
 import HomePage from '@/components/homePage'
 Vue.use(Router)
@@ -34,6 +37,18 @@ export default new Router({
           path:'/managerIndex/stuManage',
           component:StuManage
         },
+        {
+          path:'/managerIndex/departManage',
+          component:DepartManage
+        },
+        {
+          path:'/managerIndex/topicManage',
+          component:TopicManage
+        },
+        {
+          path:'/managerIndex/systemManage',
+          component:SystemManage
+        }
       ]
     },
     {
