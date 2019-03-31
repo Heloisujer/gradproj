@@ -4,7 +4,7 @@
             <div class="logobg-img" :style="{background:'url(/static/images/login-bg.jpg)',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center'}">
                 <img src="/static/images/logo.jpg" alt="" class="login-logo" width="100px" height="100px">
                 <span class="login-title">
-                    攀枝花学院毕业论文选题系统
+                    攀枝花学院毕业设计管理系统
                 </span>
                 <div class="login-content">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -15,7 +15,7 @@
                             <el-input @keyup.enter.native="enterCk($event)" type="password" placeholder="请输入密码" v-model="ruleForm.password"></el-input>
                         </el-form-item> 
                         <el-form-item prop="role" label="用户类型：">
-                            <el-select v-model="ruleForm.region" placeholder="请选择用户类型">
+                            <el-select v-model="ruleForm.role" placeholder="请选择用户类型">
                                 <el-option label="管理员" value="manager"></el-option>
                                 <el-option label="导师" value="teacher"></el-option>
                                 <el-option label="学生" value="student"></el-option>
@@ -24,7 +24,11 @@
                         </el-form-item>
                         <el-form-item prop="code" label="验证码：" required>
                             <el-input @keyup.enter.native="enterCk($event)" v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
-                            <canvas width="92" height="36" id="code">验证码</canvas>
+                            <canvas width="92" height="36" id="code" class="identify-code">验证码</canvas>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="login">登录</el-button>
+                            <el-button @click="resetForm('ruleForm')">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -34,14 +38,15 @@
 </template>
 
 <script>
+import md5 from '../../static/js/md5.min.js';
 export default {
     data() {
         const CheckCode = (rule, value, callback) =>{
             // console.log(value,this.codes)
             if (value === '') {
-                callback(new Error('请输入验证码!'));
+                callback(new Error('请输入验证码！'));
             } else if (value.toUpperCase() !== this.codes) {
-                callback(new Error('请输入正确的验证码!'));
+                callback(new Error('请输入正确的验证码！'));
             } else {
                 callback();
             }
@@ -57,15 +62,15 @@ export default {
             },
             rules: {
                 username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { required: true, message: '请输入用户名！', trigger: 'blur' },
                     { min: 3, max: 12, message: '长度在 3到 12 个字符', trigger: 'blur' },
                 ],
                 password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { required: true, message: '请输入密码！', trigger: 'blur' },
                     { min: 6, message: '长度大于 6 个字符', trigger: 'blur' },
                 ],
                 role: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                    { required: true, message: '请选择用户类型！', trigger: 'change' }
                 ],
                 code: [
                     { required: true,validator:CheckCode, trigger: 'blur' }
@@ -80,6 +85,10 @@ export default {
             if(keyCode == 13 && this.ruleForm.username!='' &&this.ruleForm.password!=''){
                 this.login();
             }
+        },
+        login() {},
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
         // 绘制验证码
         //1.新建一个函数产生随机数
@@ -138,6 +147,7 @@ export default {
         }//绘制验证码结束    
     },
     mounted(){
+        this.codes='';
    	    this.drawCode();
     }
 }

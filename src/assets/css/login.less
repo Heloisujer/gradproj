@@ -3,6 +3,7 @@
     height: 100vh;
     .logobg-img {
         width: 100%;
+        min-width: 1200px;
         height: 100%;
         .login-logo {
             float: left;
@@ -22,7 +23,25 @@
             clear: both;
             position: absolute;
             top: 32%;
-            margin-left: 50px;
+            margin-left: 44px;
+            .identify-code {
+                position: absolute;
+                top: 4%;
+                margin-left: 210px;
+            }
+            .el-button {
+                width: 60px;
+                height: 30px;
+                line-height: 2px;
+                margin-left: 20px;
+                margin-right: 30px;
+                span {
+                    margin-left: -4px;
+                }
+            }
+            .el-button--default {
+                margin: 0;
+            }
         }
     }
 }
