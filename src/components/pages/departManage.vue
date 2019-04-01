@@ -15,6 +15,7 @@
                 v-model="search"
                 size="mini"
                 placeholder="输入院系名称搜索"/>
+                <el-button size="mini" type="primary" @click="ckDepart">查询</el-button>
             </template>
             <template slot-scope="scope">
                 <el-button
@@ -63,7 +64,8 @@ export default {
         deleteDepart(index, row) {
             console.log(index, row);
         },
-        addDepart(){}
+        addDepart(){},
+        ckDepart(){}
         // handleSizeChange(val) {
         //     console.log(`每页 ${val} 条`);
         // },
@@ -81,6 +83,10 @@ export default {
 }
 .el-table .cell {
     text-align: center;
+}
+.el-table .el-input {
+    width: 300px;
+    /* margin-right: -36px; */
 }
 .addDepart {
     float: right;
