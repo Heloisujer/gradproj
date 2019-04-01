@@ -1,5 +1,5 @@
 <template>
-    
+    <div class="departManage-main"></div>
 </template>
 
 <script>
