@@ -6,6 +6,11 @@ import ElementUI from 'element-ui';
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css';
 
+import axios from 'axios';
+
+/*使用axios插件*/
+Vue.prototype.$http = axios;
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 // 引入所有css样式文件
