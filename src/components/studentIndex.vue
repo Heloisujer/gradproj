@@ -15,9 +15,9 @@ export default {
     data() {
         return {        
             listData:[
-                {menuI:'1',menuName:'课题选择',menuImages: "el-icon-edit-outline"},
-                {menuI:'2',menuName:'个人信息',menuImages: "el-icon-edit"},
-                {menuI:'3',menuName:'论文上传',menuImages: "el-icon-upload"},
+                {menuI:'/studentIndex/topicManage',menuName:'课题选择',menuImages: "el-icon-edit-outline"},
+                {menuI:'/studentIndex/stuDetails',menuName:'个人信息',menuImages: "el-icon-edit"},
+                // {menuI:'3',menuName:'论文上传',menuImages: "el-icon-upload"},
             ]
         }
     },

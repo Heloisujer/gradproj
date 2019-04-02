@@ -84,6 +84,9 @@ export default {
 .el-table .cell {
     text-align: center;
 }
+.el-table th div {
+    overflow: visible;
+}
 .el-table .el-input {
     width: 300px;
     /* margin-right: -36px; */

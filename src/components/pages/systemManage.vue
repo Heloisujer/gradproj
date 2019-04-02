@@ -1,7 +1,7 @@
 <template>
     <div class="systemManage-main">
         <div class="topic-date">
-            <p class="demonstration">学生选题开放时间：</p>
+            <p class="demonstration">系统选题开放时间：</p>
             <el-date-picker
             v-model="dataValue"
             type="daterange"

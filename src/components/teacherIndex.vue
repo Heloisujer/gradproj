@@ -15,8 +15,8 @@ export default {
     data() {
         return {        
             listData:[
-                {menuI:'1',menuName:'课题管理',menuImages: "el-icon-edit-outline"},
-                {menuI:'2',menuName:'个人信息',menuImages: "el-icon-edit"},
+                {menuName:'课题管理',menuImages: "el-icon-edit-outline",menuI:'/teacherIndex/topicManage'},
+                {menuName:'个人信息',menuImages: "el-icon-edit",menuI:'/teacherIndex/teaDetails'},
             ]
         }
     },
