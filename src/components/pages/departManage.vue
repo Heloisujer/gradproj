@@ -25,11 +25,11 @@
                 <el-button
                 size="mini"
                 type="danger"
-                @click="deleteDepart(scope.$index, scope.row)">删除</el-button>
+                @click="stopDepart(scope.$index, scope.row)">停用</el-button>
             </template>
             </el-table-column>
         </el-table>
-        <el-button class="addDepart" size="mini" type="success" @click="addDepart">+ 新增</el-button>
+        <el-button class="addDepart" size="mini" type="success" @click="addDepart()">+ 新增</el-button>
         <!-- <div class="footer_right">
             <el-pagination
                 background
@@ -61,7 +61,7 @@ export default {
         modifyDepart(index, row) {
             console.log(index, row);
         },
-        deleteDepart(index, row) {
+        stopDepart(index, row) {
             console.log(index, row);
         },
         addDepart(){},
