@@ -1,11 +1,11 @@
 <template>
     <div class="departManage-main" style="width:1000px;margin:0 auto;">
         <el-table
-            :data="tableData.filter(data => !search || data.department.toLowerCase().includes(search.toLowerCase()))"
+            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
             <el-table-column
             label="院系名称"
-            prop="department"
+            prop="name"
             width="500px">
             </el-table-column>
             <el-table-column
@@ -41,6 +41,21 @@
                 :total="1000">
             </el-pagination>
         </div> -->
+        <el-dialog
+            :title="dialogVal.activeIndex==-1?'新增院系':'修改院系信息'"
+            :visible.sync="dialogVal.dialogVisible"
+            :center="true"
+            :before-close="clearState"
+            >
+            <div class="eInputBoxs">
+                <label for="">院系名称:</label>
+                <el-input v-model="dialogVal.name"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="clearState">取 消</el-button>
+                <el-button type="primary" @click="edit()">提 交</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -49,22 +64,52 @@ export default {
     data() {
       return {
             tableData: [{
-            department:'aaa',
-            }, {
-            department:'bbb',
+                name:'aaa',
+                }, {
+                name:'bbb',
             }],
             search: '',
+            dialogVal:{
+                activeIndex:-1,
+                dialogVisible: false, 
+                name:'',
+            },
             currentPage: 1,
         }
     },
     methods: {
+        clearState(){
+            this.dialogVal.name=='';
+            // this.dialogVal.dialogVisible = false;
+        },
+        // edit() {
+        //     if(this.dialogVal.name==''){
+        //         this.$message("请输入院系名称！");
+        //         return;
+        //     }
+        //     if( this.dialogVal.activeIndex!==-1){
+        //         this.modifyDepart(index, row);
+        //     }else{
+        //         this.addDepart();       
+        //     }         
+        // },
         modifyDepart(index, row) {
+            this.dialogVal.activeIndex = index;
+            this.dialogVal.dialogVisible = true;
+            this.dialogVal.name = row.name;
             console.log(index, row);
         },
         stopDepart(index, row) {
+            this.dialogVal.name = '';
             console.log(index, row);
         },
-        addDepart(){},
+        addDepart(){
+            this.dialogVal= {
+                activeIndex:-1,
+                dialogVisible: true, 
+                name:this.dialogVal.name,
+            } 
+        },
         ckDepart(){}
         // handleSizeChange(val) {
         //     console.log(`每页 ${val} 条`);

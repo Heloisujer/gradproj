@@ -86,7 +86,9 @@ export default {
                 this.login();
             }
         },
-        login() {},
+        login() {
+            this.$router.push("/managerIndex/manManage")
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
