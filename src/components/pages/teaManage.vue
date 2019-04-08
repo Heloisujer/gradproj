@@ -1,10 +1,10 @@
 <template>
-    <div class="teaManage-main" style="width:1000px;margin:0 auto;">
+    <div class="stuManage-main" style="width:1000px;margin:0 auto;">
         <div class="inputBox">
 			<label>请输入导师姓名：</label>
 			<el-input v-model="searchTxt" prefix-icon="el-icon-search"></el-input>
             <el-button size="mini" type="primary" @click="search()">查询</el-button>
-            <el-button size="mini" type="success" @click="addTea()">+ 新增</el-button>
+            <el-button size="mini" type="success" @click="addStu()">+ 新增</el-button>
 	    </div>
         <div class="tableBox">
             <el-table
@@ -29,6 +29,11 @@
                 >
                 </el-table-column>
                 <el-table-column
+                prop="job_title"
+                label="职位"
+                >
+                </el-table-column>
+                <el-table-column
                 prop="phone"
                 label="联系方式">
                 </el-table-column>
@@ -39,11 +44,11 @@
                     <el-button
                     size="mini"
                     type="warning"
-                    @click="editTea(scope.$index, scope.row)">修改</el-button>
+                    @click="editStu(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
                     type="danger"
-                    @click="deleteTea(scope.$index, scope.row)">删除</el-button>
+                    @click="deleteStu(scope.$index, scope.row)">删除</el-button>
                     <el-button
                     size="mini"
                     type="info"
@@ -64,16 +69,17 @@ export default {
                 username: '111',
                 name: '王小虎',
                 department:'aaa',
+                job_title:'教授',
                 phone: '15985672342'
             }]
         }
     },
     methods:{
         search(){},
-        editTea(index,row){},
-        deleteTea(index,row){},
-        resetPwd(row){},
-        addTea(){}
+        editStu(index,row){},
+        addStu(){},
+        deleteStu(index,row){},
+        resetPwd(row){}
     }
 }
 </script>
