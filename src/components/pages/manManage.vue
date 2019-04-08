@@ -104,8 +104,6 @@ export default {
             this.row = {
                 username:"",
                 name:'',
-                phone: '',
-                department:'',
             };
             this.dialogVal.dialogVisible = false;
         },

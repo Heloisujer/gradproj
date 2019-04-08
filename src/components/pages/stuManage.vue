@@ -1,10 +1,10 @@
 <template>
-    <div class="teaManage-main" style="width:1000px;margin:0 auto;">
+    <div class="stuManage-main" style="width:1000px;margin:0 auto;">
         <div class="inputBox">
 			<label>请输入学生姓名：</label>
 			<el-input v-model="searchTxt" prefix-icon="el-icon-search"></el-input>
             <el-button size="mini" type="primary" @click="search()">查询</el-button>
-            <el-button size="mini" type="success" @click="addTea()">+ 新增</el-button>
+            <el-button size="mini" type="success" @click="addStu()">+ 新增</el-button>
 	    </div>
         <div class="tableBox">
             <el-table
@@ -39,11 +39,11 @@
                     <el-button
                     size="mini"
                     type="warning"
-                    @click="editTea(scope.$index, scope.row)">修改</el-button>
+                    @click="editStu(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
                     type="danger"
-                    @click="deleteTea(scope.$index, scope.row)">删除</el-button>
+                    @click="deleteStu(scope.$index, scope.row)">删除</el-button>
                     <el-button
                     size="mini"
                     type="info"
@@ -71,7 +71,7 @@
                 <el-input v-model="row.phone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="所属院系" prop="department" class="eInputBoxs">
+                <el-form-item label="所属院系" prop="department" class="eInputBoxs" :disabled="disabled">
                 <el-select v-model="row.department" placeholder="请选择所属院系">
                     <el-option :key="i+v+'department'" v-for="(v,i) in departments " :label="v.txt" :value="v.val"></el-option>
                 </el-select>
@@ -169,7 +169,7 @@ export default {
             }         
         },
         search(){},
-        editTea(index,row){
+        editStu(index,row){
             this.disabled = true;
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
@@ -181,9 +181,9 @@ export default {
                 this.$refs.ruleForm.clearValidate(); //清空判断状态
             },2);
         },
-        deleteTea(index,row){},
+        deleteStu(index,row){},
         resetPwd(row){},
-        addTea(){
+        addStu(){
             this.disabled = false;
             this.dialogVal= {
                 activeIndex:-1, 

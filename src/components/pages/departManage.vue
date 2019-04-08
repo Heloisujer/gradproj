@@ -42,15 +42,18 @@
             </el-pagination>
         </div> -->
         <el-dialog
-            :title="dialogVal.activeIndex==-1?'新增院系':'修改院系信息'"
-            :visible.sync="dialogVal.dialogVisible"
+            :title="dialogVal.activeIndex==-1?'院系新增':'修改院系信息' "
+            :visible="dialogVal.dialogVisible"
             :center="true"
             :before-close="clearState"
-            >
-            <div class="eInputBoxs">
-                <label for="">院系名称:</label>
-                <el-input v-model="dialogVal.name"></el-input>
-            </div>
+            >       
+            <el-form :model="row" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+
+                <el-form-item label="院系名称" prop="name" class="eInputBoxs">
+                <el-input v-model="row.name"></el-input>
+                </el-form-item>
+               
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="clearState">取 消</el-button>
                 <el-button type="primary" @click="edit()">提 交</el-button>
@@ -63,40 +66,61 @@
 export default {
     data() {
       return {
+            dialogVal:{
+                activeIndex:-1,
+                dialogVisible: false,  
+            },
+            row:{
+                username:"",
+                name:'',
+            },
+            rules:{
+                name: [
+                    { required: true, message: '请输入院系名称', trigger: 'blur' },
+                    { max:13, message: ' 13 个字符以内', trigger: 'blur' }
+                ],
+            },
             tableData: [{
                 name:'aaa',
                 }, {
                 name:'bbb',
             }],
             search: '',
-            dialogVal:{
-                activeIndex:-1,
-                dialogVisible: false, 
-                name:'',
-            },
             currentPage: 1,
         }
     },
     methods: {
-        clearState(){
-            this.dialogVal.name=='';
-            // this.dialogVal.dialogVisible = false;
+       clearState(){
+            this.$refs.ruleForm.clearValidate();
+            this.$refs.ruleForm.resetFields(); 
+            this.row = {
+                name:'',
+            };
+            this.dialogVal.dialogVisible = false;
         },
-        // edit() {
-        //     if(this.dialogVal.name==''){
-        //         this.$message("请输入院系名称！");
-        //         return;
-        //     }
-        //     if( this.dialogVal.activeIndex!==-1){
-        //         this.modifyDepart(index, row);
-        //     }else{
-        //         this.addDepart();       
-        //     }         
-        // },
+        edit(){
+            let res = false;
+            this.$refs.ruleForm.validate((valid) => {
+            if (valid) {
+                res =  true;
+            } else {
+                res = false;
+            }
+            }); 
+            if(!res){
+            return;
+            }
+            if( this.dialogVal.activeIndex!==-1){
+            this.editData();
+            }else{
+            // 新增
+            this.addData();       
+            }         
+        },
         modifyDepart(index, row) {
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
-            this.dialogVal.name = row.name;
+            this.row.name = row.name;
             console.log(index, row);
         },
         stopDepart(index, row) {
