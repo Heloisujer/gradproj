@@ -53,25 +53,29 @@
             </el-table>
         </div>
         <el-dialog
-            :title="dialogVal.activeIndex==-1?'导师新增':'修改导师信息' "
+            :title="dialogVal.activeIndex==-1?'学生新增':'修改学生信息' "
             :visible="dialogVal.dialogVisible"
             :center="true"
             :before-close="clearState"
             >       
             <el-form :model="row" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
-                <el-form-item label="学号" prop="username" class="eInputBoxs">
+                <el-form-item label="学号" prop="username">
                 <el-input v-model="row.username" :disabled="disabled"></el-input>
                 </el-form-item>
 
-                <el-form-item label="姓名" prop="name" class="eInputBoxs">
+                <el-form-item label="密码" prop="password" v-show="false" required>
+                <el-input v-model="row.password" :disabled="true"></el-input>
+                </el-form-item>
+
+                <el-form-item label="姓名" prop="name">
                 <el-input v-model="row.name"></el-input>
                 </el-form-item>
 
-                <el-form-item label="联系方式" prop="phone" class="eInputBoxs">
+                <el-form-item label="联系方式" prop="phone">
                 <el-input v-model="row.phone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="所属院系" prop="department" class="eInputBoxs" :disabled="disabled">
+                <el-form-item label="所属院系" prop="department" :disabled="disabled">
                 <el-select v-model="row.department" placeholder="请选择所属院系">
                     <el-option :key="i+v+'department'" v-for="(v,i) in departments " :label="v.txt" :value="v.val"></el-option>
                 </el-select>
@@ -108,6 +112,7 @@ export default {
             searchTxt:'',
             row:{
                 username:"",
+                password:"",
                 name:'',
                 phone: '',
                 department:'',
@@ -144,6 +149,7 @@ export default {
             this.row = {
                 username:"",
                 name:'',
+                password:"",
                 phone: '',
                 department:'',
             };
@@ -177,14 +183,15 @@ export default {
             this.row.phone = row.phone;
             this.row.name = row.name;
             this.row.department = row.department;
-            setTimeout(()=>{
-                this.$refs.ruleForm.clearValidate(); //清空判断状态
-            },2);
+            // setTimeout(()=>{
+            //     this.$refs.ruleForm.clearValidate();
+            // },2);
         },
         deleteStu(index,row){},
         resetPwd(row){},
         addStu(){
             this.disabled = false;
+            this.dialogVal.password = "123456",
             this.dialogVal= {
                 activeIndex:-1, 
                 dialogVisible: true, 

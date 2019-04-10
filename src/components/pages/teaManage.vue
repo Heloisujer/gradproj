@@ -58,7 +58,7 @@
             </el-table>
         </div>
         <el-dialog
-            :title="dialogVal.activeIndex==-1?'学生新增':'修改学生信息' "
+            :title="dialogVal.activeIndex==-1?'导师新增':'导师学生信息' "
             :visible="dialogVal.dialogVisible"
             :center="true"
             :before-close="clearState"
@@ -66,6 +66,10 @@
             <el-form :model="row" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="工号" prop="username" class="eInputBoxs">
                 <el-input v-model="row.username" :disabled="disabled"></el-input>
+                </el-form-item>
+
+                <el-form-item label="密码" prop="password" v-show="false" required>
+                <el-input v-model="row.password"></el-input>
                 </el-form-item>
 
                 <el-form-item label="姓名" prop="name" class="eInputBoxs">
@@ -119,6 +123,7 @@ export default {
             searchTxt:'',
             row:{
                 username:"",
+                password:"",
                 name:'',
                 phone: '',
                 department:'',
@@ -157,6 +162,7 @@ export default {
             this.$refs.ruleForm.resetFields(); 
             this.row = {
                 username:"",
+                password:"",
                 name:'',
                 phone: '',
                 department:'',
@@ -193,9 +199,9 @@ export default {
             this.row.name = row.name;
             this.row.department = row.department;
             this.row.job_title = row.job_title;
-            setTimeout(()=>{
-                this.$refs.ruleForm.clearValidate(); //清空判断状态
-            },2);
+            // setTimeout(()=>{
+            //     this.$refs.ruleForm.clearValidate(); 
+            // },2);
         },
         addTea(){
             this.disabled = false;
@@ -205,6 +211,7 @@ export default {
                 row:{
                 id:'',
                 username:"",
+                password:"",
                 name:'',
                 phone: '',
                 department:'',

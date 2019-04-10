@@ -54,6 +54,10 @@
                 <el-input v-model="row.username" :disabled="disabled"></el-input>
                 </el-form-item>
 
+                <el-form-item label="密码" prop="password" v-show="false" required>
+                <el-input v-model="row.password" :disabled="true"></el-input>
+                </el-form-item>
+
                 <el-form-item label="姓名" prop="name" class="eInputBoxs">
                 <el-input v-model="row.name"></el-input>
                 </el-form-item>
@@ -78,6 +82,7 @@ export default {
             },
             row:{
                 username:"",
+                password:"",
                 name:'',
             },
             rules:{
@@ -103,6 +108,7 @@ export default {
             this.$refs.ruleForm.resetFields(); 
             this.row = {
                 username:"",
+                password:"",
                 name:'',
             };
             this.dialogVal.dialogVisible = false;
@@ -134,9 +140,9 @@ export default {
             this.disabled = true;
             // console.log(row.username);
             this.row.name = row.name;
-            setTimeout(()=>{
-                this.$refs.ruleForm.clearValidate();
-            },2);
+            // setTimeout(()=>{
+            //     this.$refs.ruleForm.clearValidate();
+            // },2);
         },
         addMan(){
             this.disabled = false;
@@ -145,6 +151,7 @@ export default {
                 dialogVisible: true, 
                 row:{
                 id:'',
+                password:"",
                 username:"",
                 name:'',
                 }       
