@@ -14,14 +14,14 @@
                         <el-form-item prop="password" label="密码：">
                             <el-input @keyup.enter.native="enterCk($event)" type="password" placeholder="请输入密码" v-model="ruleForm.password"></el-input>
                         </el-form-item> 
-                        <el-form-item prop="role" label="用户类型：">
+                        <!-- <el-form-item prop="role" label="用户类型：">
                             <el-select v-model="ruleForm.role" placeholder="请选择用户类型">
                                 <el-option label="管理员" value="manager"></el-option>
                                 <el-option label="导师" value="teacher"></el-option>
                                 <el-option label="学生" value="student"></el-option>
-                            </el-select>
+                            </el-select> -->
                             <!-- <el-input @keyup.enter.native="enterCk($event)" v-model="ruleForm.username" placeholder="请选择用户类型"></el-input> -->
-                        </el-form-item>
+                        <!-- </el-form-item> -->
                         <el-form-item prop="code" label="验证码：" required>
                             <el-input @keyup.enter.native="enterCk($event)" v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
                             <canvas width="92" height="36" id="code" class="identify-code">验证码</canvas>
@@ -57,7 +57,7 @@ export default {
             ruleForm: {
                 username: '',
                 password: '',
-                role:'',
+                // role:'',
                 code:''
             },
             rules: {
@@ -69,9 +69,9 @@ export default {
                     { required: true, message: '请输入密码！', trigger: 'blur' },
                     { min: 6, message: '长度大于 6 个字符', trigger: 'blur' },
                 ],
-                role: [
-                    { required: true, message: '请选择用户类型！', trigger: 'change' }
-                ],
+                // role: [
+                //     { required: true, message: '请选择用户类型！', trigger: 'change' }
+                // ],
                 code: [
                     { required: true,validator:CheckCode, trigger: 'blur' }
                 ],
@@ -87,7 +87,7 @@ export default {
             }
         },
         login() {
-            this.$router.push("/managerIndex/manManage")
+            this.$router.push("/managerIndex")
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
