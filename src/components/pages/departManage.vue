@@ -15,7 +15,8 @@
                 v-model="search"
                 size="mini"
                 placeholder="输入院系名称搜索"/>
-                <el-button size="mini" type="primary" @click="ckDepart">查询</el-button>
+                <el-button size="mini" type="primary" @click="ckDepart()">查询</el-button>
+                <el-button size="mini" type="success" @click="addDepart()">+ 新增</el-button>
             </template>
             <template slot-scope="scope">
                 <el-button
@@ -29,18 +30,27 @@
             </template>
             </el-table-column>
         </el-table>
-        <el-button class="addDepart" size="mini" type="success" @click="addDepart()">+ 新增</el-button>
-        <!-- <div class="footer_right">
-            <el-pagination
-                background
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-size="100"
-                layout="prev, pager, next, jumper"
-                :total="1000">
-            </el-pagination>
-        </div> -->
+
+        <div class="pages">
+            <div class="pageBox">
+                <div class="total">
+                    <span>共<span v-text="pages.total"></span>条</span>  
+                    <span class="span2">显示条数</span>     
+                    </div> 
+                    <div class="pageBoxsIn">
+                        <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pages.pageNums"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="pages.pageSize"
+                        layout="sizes, prev, pager, next, jumper"
+                        :total="pages.total">
+                    </el-pagination>  
+                </div>        
+            </div>
+        </div>  
+
         <el-dialog
             :title="dialogVal.activeIndex==-1?'院系新增':'修改院系信息' "
             :visible="dialogVal.dialogVisible"
@@ -86,7 +96,11 @@ export default {
                 name:'bbb',
             }],
             search: '',
-            currentPage: 1,
+            pages:{
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            },
         }
     },
     methods: {
@@ -134,13 +148,15 @@ export default {
                 name:this.dialogVal.name,
             } 
         },
-        ckDepart(){}
-        // handleSizeChange(val) {
-        //     console.log(`每页 ${val} 条`);
-        // },
-        // handleCurrentChange(val) {
-        //     console.log(`当前页: ${val}`);
-        // }
+        ckDepart(){},
+        handleCurrentChange(val) {
+            this.pages.pageNums = val;
+            // this.getData();
+        },
+        handleSizeChange(val) {
+            this.pages.pageSize = val;
+            // this.getData();
+        },
     }
 }
 </script>
@@ -160,44 +176,4 @@ export default {
     width: 300px;
     /* margin-right: -36px; */
 }
-.addDepart {
-    float: right;
-    margin-top: 10px;
-}
-/* .footer_right {
-    float: right;
-    margin-top: 50px;
-    margin-right: 21px;
-}
-
-.footer_right .pagination_item {
-    position: relative;
-    top: 5px;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(77,77,77,1);
-    line-height:20px;
-}
-
-.el-pagination {
-    float: right;
-}
-
-.el-pagination .el-pagination__total,.el-pagination  .el-pagination__sizes {
-    height:20px;
-    font-size:14px;
-    font-family:PingFangSC-Regular;
-    font-weight:400;
-    color:rgba(77,77,77,1);
-}
-
-.el-pagination .el-select--mini,.el-pagination__sizes {
-    width: 80px;
-    margin-right: 40px;
-}
-
-.el-pagination  .el-pagination__sizes .el-input {
-    margin-top: -5px;
-} */
 </style>

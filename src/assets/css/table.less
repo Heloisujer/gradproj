@@ -29,3 +29,114 @@
         text-align: center;
     }
 }
+.pages{
+    // margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    background: #fff;
+    .total{
+        float: left;
+        line-height: 50px;
+        padding-left: 50px;
+        span{
+            font-size:14px;        
+            font-weight:400;
+            color:rgba(77,77,77,1);
+            span{
+                color: #FF4E4F;
+                padding-right: 2px;
+            }
+        }
+        .span2{
+            margin-left: 22px;
+        }
+    }
+}
+.pageBox{
+    float: right;
+    .pageBoxsIn{
+        float: right;
+        margin-right: 10px;
+        .el-pagination__sizes .el-input .el-input__inner{
+            font-size: 14px;
+            padding-left: 8px;
+        }
+        .el-pagination .el-select .el-input .el-input__inner{
+            padding-right: 25px;
+            border-radius: 3px;
+        }
+        .el-input--mini .el-input__inner{
+            height: 30px;
+            line-height: 30px;
+        }
+        .el-pagination .el-select .el-input{
+            width: 100px;
+            margin-top: -1px;
+        }
+        .el-pagination button, .el-pagination span:not([class*=suffix]){
+            line-height: 40px;
+            height: 30px;
+            font-size: 14px;
+        }
+        // 左右按钮
+        .el-pagination button{
+            margin-top: 7px;
+            border: 1px solid #C8C8C8;
+            min-width: auto;
+            padding: 0 6px;
+            &.btn-prev{
+                border-top-left-radius:3px;    
+                border-bottom-left-radius:3px;
+            }
+            &.btn-next{            
+                border-top-right-radius:3px;
+                border-bottom-right-radius:3px;    
+            }
+        }
+        .el-pager li{
+            min-width: auto;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #C8C8C8;
+            border-right: 0;
+            font-size: 14px;
+            line-height: 30px;
+            margin-top: 7px;
+            color: #4D4D4D;
+            &:nth-of-type(1){
+                border-left: 0;
+            }
+            &.active{
+                background: #0380FF;
+                color: #fff;
+                border: 0;
+            }
+        }
+        .el-pagination__editor.el-input .el-input__inner{
+            height: 30pxpx;
+            width: 60px;
+        }
+        .el-pagination__jump{
+            margin-top: 2px;
+            margin-left: 24px;
+            min-width: 34px;
+        }
+        .el-pagination__sizes{
+            margin-top: 3px;
+        }
+        .el-pagination{
+            padding: 2px 5px;
+            .el-pagination__editor.el-input{
+                width: 60px;
+            }
+            .el-pagination__editor{
+                line-height: 18px;
+                padding: 0 2px;
+                height: 28px;
+                margin: 0 10px;
+                border-radius: 3px;
+            }
+        }
+    }
+}

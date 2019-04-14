@@ -57,6 +57,25 @@
                 </el-table-column>
             </el-table>
         </div>
+        <div class="pages">
+            <div class="pageBox">
+                <div class="total">
+                    <span>共<span v-text="pages.total"></span>条</span>  
+                    <span class="span2">显示条数</span>     
+                    </div> 
+                    <div class="pageBoxsIn">
+                        <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pages.pageNums"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="pages.pageSize"
+                        layout="sizes, prev, pager, next, jumper"
+                        :total="pages.total">
+                    </el-pagination>  
+                </div>        
+            </div>
+        </div>
         <el-dialog
             :title="dialogVal.activeIndex==-1?'导师新增':'导师学生信息' "
             :visible="dialogVal.dialogVisible"
@@ -146,6 +165,11 @@ export default {
                     {  required: true, message: '请选择所属院系', trigger: 'change'},
                 ],
             },
+            pages:{
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            },
             searchTxt:'',
             tableData: [{
                 username: '111',
@@ -157,6 +181,14 @@ export default {
         }
     },
     methods:{
+        handleCurrentChange(val) {
+            this.pages.pageNums = val;
+            // this.getData();
+        },
+        handleSizeChange(val) {
+            this.pages.pageSize = val;
+            // this.getData();
+        },
         clearState(){
             this.$refs.ruleForm.clearValidate();
             this.$refs.ruleForm.resetFields(); 

@@ -12,7 +12,7 @@
                 stripe
                 :data="tableData"      
                 :highlight-current-row='true'
-                style="width: 700px">
+                style="width: 1000px">
                 <el-table-column
                 prop="username"
                 label="账号"
@@ -43,6 +43,27 @@
                 </el-table-column>
             </el-table>
         </div>
+
+        <div class="pages">
+            <div class="pageBox">
+                <div class="total">
+                    <span>共<span v-text="pages.total"></span>条</span>  
+                    <span class="span2">显示条数</span>     
+                    </div> 
+                    <div class="pageBoxsIn">
+                        <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pages.pageNums"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="pages.pageSize"
+                        layout="sizes, prev, pager, next, jumper"
+                        :total="pages.total">
+                    </el-pagination>  
+                </div>        
+            </div>
+        </div>  
+
         <el-dialog
             :title="dialogVal.activeIndex==-1?'管理员新增':'修改管理员信息' "
             :visible="dialogVal.dialogVisible"
@@ -96,6 +117,11 @@ export default {
                 ],
             },
             searchTxt:'',
+            pages:{
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            },
             tableData: [{
                 username: '111',
                 name: '王小虎',
@@ -103,6 +129,14 @@ export default {
         }
     },
     methods:{
+        handleCurrentChange(val) {
+            this.pages.pageNums = val;
+            // this.getData();
+        },
+        handleSizeChange(val) {
+            this.pages.pageSize = val;
+            // this.getData();
+        },
         clearState(){
             this.$refs.ruleForm.clearValidate();
             this.$refs.ruleForm.resetFields(); 

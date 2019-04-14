@@ -83,6 +83,25 @@
                 </el-table-column>
             </el-table>
         </div>
+        <div class="pages">
+            <div class="pageBox">
+                <div class="total">
+                    <span>共<span v-text="pages.total"></span>条</span>  
+                    <span class="span2">显示条数</span>     
+                    </div> 
+                    <div class="pageBoxsIn">
+                        <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pages.pageNums"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="pages.pageSize"
+                        layout="sizes, prev, pager, next, jumper"
+                        :total="pages.total">
+                    </el-pagination>  
+                </div>        
+            </div>
+        </div> 
         <el-dialog
             :title="dialogVal.activeIndex==-1?'课题新增':'修改课题详情' "
             :visible="dialogVal.dialogVisible"
@@ -209,6 +228,11 @@
 export default {//查看详情 论文下载 论文上传 删除 修改 选报 审核 新增 打印
     data () {
         return {
+            pages:{
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            },
             seeDialog:{
                 show:false,
             },
@@ -287,6 +311,14 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         }
     },
     methods:{
+        handleCurrentChange(val) {
+            this.pages.pageNums = val;
+            // this.getData();
+        },
+        handleSizeChange(val) {
+            this.pages.pageSize = val;
+            // this.getData();
+        },
         print(){
             this.printInfo.show = true;
         },

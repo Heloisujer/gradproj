@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import axios from 'axios';
 
+//引入公共js文件
+import common from './common'
+Vue.use(common);
 /*使用axios插件*/
 Vue.prototype.$http = axios;
 
