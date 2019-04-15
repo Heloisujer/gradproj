@@ -9,7 +9,7 @@
                     <!-- <span class="login-title">攀枝花学院毕业设计管理系统</span> -->
                     <div class="header_username">
                         欢迎您：
-                        <span style="color:red"><!-- {{userName}} -->bbb</span>
+                        <span style="color:red">{{Name}}</span>
                         <el-dropdown  @command="handleCommand" style="color:#fff">
                             <span class="el-dropdown-link">
                                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -41,6 +41,11 @@
 <script>
 export default {
     props:['menuList'],
+    data(){
+        return {
+            Name:sessionStorage.getItem("name"),
+        }
+    },
     methods: {
     gopath(url) {
       //路由跳转

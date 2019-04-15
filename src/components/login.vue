@@ -27,7 +27,7 @@
                             <canvas width="92" height="36" id="code" class="identify-code">验证码</canvas>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="login">登录</el-button>
+                            <el-button type="primary" @click="login()">登录</el-button>
                             <el-button @click="resetForm('ruleForm')">重置</el-button>
                         </el-form-item>
                     </el-form>
@@ -53,11 +53,10 @@ export default {
         };
         return {
             //   isSubmin: false,
-            //   submintText: "登录",
             ruleForm: {
-                username: '',
-                password: '',
-                // role:'',
+                username: 'admin',
+                password: 'pzhutopicsys12!@',
+                role:'',
                 code:''
             },
             rules: {
@@ -87,7 +86,65 @@ export default {
             }
         },
         login() {
-            this.$router.push("/managerIndex")
+            if(Number(this.ruleForm.username.length)>12){
+                return this.$message.error("用户名字符最大为12位");
+            }
+            if(Number(this.ruleForm.username.length)<3){
+                return  this.$message.error("用户名字符最小为3位");
+            }
+            if(Number(this.ruleForm.password.length)<6){
+                return  this.$message.error("密码最小为6位");
+            }
+            if(Number(this.ruleForm.code.length)!=4){
+                return  this.$message.error("请输入正确的验证码");
+            }
+            if((this.ruleForm.code).toLowerCase() !=(this.codes).toLowerCase()){
+            return console.log(this.ruleForm,this.codes);
+           }
+        //    console.log(this.ruleForm.code.length)
+            var data = {
+                username:this.ruleForm.username,
+                password:this.ruleForm.password
+            }
+            this.$getData('post','/login',data,(res) => {
+                console.log(res.code)
+                if(res.code == 200){
+                    console.log(res.data)
+                    console.log(res.data.roleCode)
+                    console.log(res.data.name);
+                    console.log(typeof(res.data.name));
+                    sessionStorage.setItem('name',res.data.name);
+                    // console.log(sessionStorage.name);
+                    sessionStorage.setItem('roleCode',res.data.roleCode);         
+                    if(res.data.roleCode == "role_admin"){
+                        this.$router.replace('/superIndex');
+                    }
+                    if(res.data.roleCode == "role_m"){
+                        // this.$message({
+                        //     message: res.msg,
+                        //     type: 'success'
+                        // });
+                        this.$router.replace('/managerIndex');          
+                    }
+                    if(res.data.roleCode == "role_t"){
+                        // this.$message({
+                        //     message: res.msg,
+                        //     type: 'success'
+                        // });
+                        this.$router.replace('/teacherIndex');          
+                    }
+                    if(res.data.roleCode == "role_s"){
+                        // this.$message({
+                        //     message: res.msg,
+                        //     type: 'success'
+                        // });
+                        this.$router.replace('/studentIndex');          
+                    }
+                    
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

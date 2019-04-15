@@ -75,7 +75,7 @@
                 <el-input v-model="row.username" :disabled="disabled"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="password" v-show="false" required>
+                <el-form-item label="密码" prop="password" v-show="false">
                 <el-input v-model="row.password" :disabled="true"></el-input>
                 </el-form-item>
 
@@ -105,6 +105,7 @@ export default {
                 username:"",
                 password:"",
                 name:'',
+                id:''
             },
             rules:{
                 username: [
@@ -128,14 +129,17 @@ export default {
             }]
         }
     },
+    mounted(){
+        this.getData();
+  },
     methods:{
         handleCurrentChange(val) {
             this.pages.pageNums = val;
-            // this.getData();
+            this.getData();
         },
         handleSizeChange(val) {
             this.pages.pageSize = val;
-            // this.getData();
+            this.getData();
         },
         clearState(){
             this.$refs.ruleForm.clearValidate();
@@ -148,6 +152,7 @@ export default {
             this.dialogVal.dialogVisible = false;
         },
         edit(){
+            this.dialogVal.dialogVisible = false;
             let res = false;
             this.$refs.ruleForm.validate((valid) => {
             if (valid) {
@@ -163,8 +168,29 @@ export default {
             this.editData();
             }else{
             // 新增
-            this.addData();       
+            this.addData(); 
             }         
+        },
+        editData(){
+            let row  = this.row;
+            let data = {
+                id:row.id,
+                name:row.name,//用户名称
+            };
+            this.$getData('post','/manager/save',data,(res)=>{
+                let data = res.data;
+                let result = data.result;
+                if(data.code == 200){
+                    this.getData();
+                    this.clearState();
+                    this.$message({
+                        message: '修改成功!',
+                        type: 'success'
+                    }); 
+                }else{
+                    this.$message(data.msg);
+                }
+            })
         },
         search(){},
         editMan(index,row){
@@ -172,6 +198,7 @@ export default {
             this.dialogVal.dialogVisible = true;
             this.row.username = row.username;
             this.disabled = true;
+            this.row.id = row.userId;
             // console.log(row.username);
             this.row.name = row.name;
             // setTimeout(()=>{
@@ -192,7 +219,34 @@ export default {
             }
         },
         deleteMan(index,row){},
-        resetPwd(row){}
+        resetPwd(row){},
+        getData(){
+            var data = {
+                page:this.pages.pageNums,
+                size:this.pages.pageSize
+            }
+            this.$getData('get','/manager/list',data,(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    console.log(data.totalCount)
+                    this.pages.total = data.totalCount;
+                    let attrs = [];
+                    let lists = data.list;
+                    lists.map((v,i)=>{
+                      let obj = {
+                        id: v.userId,
+                        name: v.name,     
+                        username: v.username,               
+                      };
+                      attrs.push(obj);
+                    }); 
+                    this.tableData = [];
+                    this.tableData = attrs; 
+                }else{
+                    this.$message(res.msg);
+                }
+            });
+        }
     }
 }
 </script>

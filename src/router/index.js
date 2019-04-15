@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login'
+import SuperIndex from '@/components/superIndex'
 import ManagerIndex from '@/components/managerIndex'
 import TeacherIndex from '@/components/teacherIndex'
 import StudentIndex from '@/components/studentIndex'
@@ -24,12 +25,37 @@ export default new Router({
       path: '/login',name: '登录',component: Login,
     },
     {
-      path: '/managerIndex',name: '',component: ManagerIndex,
+      path: '/superIndex',name: '',component: SuperIndex,
       children:[
         {
-          path:'/managerIndex/manManage',
+          path:'/superIndex/manManage',
           component:ManManage
         },
+        {
+          path:'/superIndex/teaManage',
+          component:TeaManage
+        },
+        {
+          path:'/superIndex/stuManage',
+          component:StuManage
+        },
+        {
+          path:'/superIndex/departManage',
+          component:DepartManage
+        },
+        {
+          path:'/superIndex/systemManage',
+          component:SystemManage
+        },
+        {
+          path:'/superIndex/topicManage',
+          component:TopicManage
+        }
+      ]
+    },
+    {
+      path: '/managerIndex',name: '',component: ManagerIndex,
+      children:[
         {
           path:'/managerIndex/teaManage',
           component:TeaManage

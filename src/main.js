@@ -7,7 +7,7 @@ import router from './router'
 import 'element-ui/lib/theme-chalk/index.css';
 
 import axios from 'axios';
-
+import qs from 'qs';
 //引入公共js文件
 import common from './common'
 Vue.use(common);

@@ -15,7 +15,6 @@ export default {
     data() {
         return {        
             listData:[
-                {menuI:'/managerIndex/manManage',menuName:'管理员管理',menuImages: "el-icon-news"},
                 {menuI:'/managerIndex/teaManage',menuName:'导师管理',menuImages: "el-icon-printer"},
                 {menuI:'/managerIndex/stuManage',menuName:'学生管理',menuImages: "el-icon-document"},
                 {menuI:'/managerIndex/departManage',menuName:'院系管理',menuImages: "el-icon-rank"},
