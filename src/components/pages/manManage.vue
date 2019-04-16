@@ -75,8 +75,8 @@
                 <el-input v-model="row.username" :disabled="disabled"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="password" v-show="false">
-                <el-input v-model="row.password" :disabled="true"></el-input>
+                <el-form-item label="密码" prop="password" v-if="ok" required="">
+                <el-input v-model="row.password" disabled="disabled"></el-input>
                 </el-form-item>
 
                 <el-form-item label="姓名" prop="name" class="eInputBoxs">
@@ -93,9 +93,11 @@
 </template>
 
 <script>
+import md5 from '../../../static/js/md5.min.js';
 export default {
     data() {
         return {
+            ok:false,
             disabled:false,
             dialogVal:{
                 activeIndex:-1,
@@ -126,12 +128,13 @@ export default {
             tableData: [{
                 username: '111',
                 name: '王小虎',
-            }]
+            }],
+            userId:''
         }
     },
     mounted(){
         this.getData();
-  },
+    },
     methods:{
         handleCurrentChange(val) {
             this.pages.pageNums = val;
@@ -148,6 +151,7 @@ export default {
                 username:"",
                 password:"",
                 name:'',
+                id:''
             };
             this.dialogVal.dialogVisible = false;
         },
@@ -173,14 +177,14 @@ export default {
         },
         editData(){
             let row  = this.row;
+            console.log(this.userId);
             let data = {
-                id:row.id,
+                userId:this.userId,
+                username:row.username,
                 name:row.name,//用户名称
             };
             this.$getData('post','/manager/save',data,(res)=>{
-                let data = res.data;
-                let result = data.result;
-                if(data.code == 200){
+                if(res.code == 200){
                     this.getData();
                     this.clearState();
                     this.$message({
@@ -188,44 +192,139 @@ export default {
                         type: 'success'
                     }); 
                 }else{
-                    this.$message(data.msg);
+                    this.$message.error(res.msg);
                 }
             })
         },
-        search(){},
+        addData(){
+            let row  = this.row;
+            if(Number(row.username.length)<3){
+                return  this.$message.error("用户账号符最小为3位！");
+            }
+            let data = {
+                username:row.username,
+                name:row.name,//用户名称
+                password:md5(row.password),
+            };
+            this.$getData('post','/manager/save',data,(res)=>{
+            if(res.code == 200){
+                this.getData();
+                this.clearState();
+                this.$message({
+                    message: '新增成功!',
+                    type: 'success'
+                }); 
+            }else{
+                this.$message.error(res.msg);
+            }
+            })
+        },
+        search(){
+            this.pages={
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            };
+            this.getData();
+            if(this.searchTxt=""){
+                this.$router.go(-1)
+            }
+        },
         editMan(index,row){
+            this.ok =  false;
+            console.log(index,row.id)
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
             this.row.username = row.username;
-            this.disabled = true;
-            this.row.id = row.userId;
-            // console.log(row.username);
             this.row.name = row.name;
+            this.disabled = true;
+            this.userId = row.id;
+            console.log(this.userId);
+            // console.log(this.row.id);
+            // console.log(row.userId);
+            
             // setTimeout(()=>{
             //     this.$refs.ruleForm.clearValidate();
             // },2);
         },
         addMan(){
+            this.ok = true;
+            this.row.password = "123456";
             this.disabled = false;
             this.dialogVal= {
                 activeIndex:-1, 
                 dialogVisible: true, 
                 row:{
-                id:'',
-                password:"",
-                username:"",
-                name:'',
+                    id:'',
+                    // password:"",
+                    username:"",
+                    name:'',
                 }       
             }
         },
-        deleteMan(index,row){},
-        resetPwd(row){},
+        deleteMan(index,row){
+            this.$confirm('删除后删除后此用户将不存在！', `是否删除角色${row.name}`, {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+            this.$getData('post','/user/delete',{userId:row.id},(res) => {
+                console.log(row.id);
+                // let data = res.data;
+                // let result = data.result;
+                if(res.code==200){             
+                this.tableData.splice(index,1);
+                this.pages.total--;
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });   
+                }else{
+                this.$message.error(res.msg); 
+                }
+            
+            });
+            
+            }).catch(() => {
+                    
+            });
+        },
+        resetPwd(row){
+        this.$confirm('重置后密码还原为初始密码',`是否进行${row.name}的密码重置？`, {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+                let data ={
+                userId:row.id,            
+                };
+                this.$getData('post','/user/pwd/reset',data,(res)=>{
+                let data = res.data;
+                // let result = data.result;
+                if(res.code == 200){
+                    console.log(data.notice)
+                    this.$message({
+                    type: 'success',
+                    message: data.notice
+                    });     
+                }else{
+                    this.$message.error(res.msg);
+                    
+                }
+                })         
+            }).catch(() => {
+                    
+            });
+        },
         getData(){
-            var data = {
-                page:this.pages.pageNums,
-                size:this.pages.pageSize
-            }
-            this.$getData('get','/manager/list',data,(res) => {
+            // var data = {
+            //     page:this.pages.pageNums,
+            //     size:this.pages.pageSize,
+            //     name:this.searchTxt
+            // }
+            console.log(this.pages.pageSize)
+            console.log(this.searchTxt)
+            this.$getData('get','/manager/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.searchTxt},(res) => {
                 let data = res.data;
                 if(res.code==200){
                     console.log(data.totalCount)
@@ -243,7 +342,7 @@ export default {
                     this.tableData = [];
                     this.tableData = attrs; 
                 }else{
-                    this.$message(res.msg);
+                    this.$message.error(res.msg);
                 }
             });
         }

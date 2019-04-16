@@ -4,26 +4,24 @@ export default {
     install(Vue, options) {
         Vue.prototype.$getData = function(method,url,data,callback){
           let urls = '/api'+url;
+          if(method == 'get'){
+            urls = urls+'?';
+            for(let key in data){
+              urls+=key+'='+data[key]+'&'
+            }
+            
+            urls = urls.slice(0,-1);
+          }
             this.$http({
               method:method,
               url:urls,
               // data:data,
               data:Qs.stringify(data),
               headers:{
-                // 'token':sessionStorage.getItem('token'),
+                // 'name':sessionStorage.getItem('name'),
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
             }).then((res) => {
-                // if(res.data == 'loginError'){
-                //   alert('登陆过期，请重新登陆！');
-                //   this.$router.push('/login');      
-                //   return;
-                // }
-                let names = sessionStorage.getItem('name');
-                if(names === undefined){
-                  this.$router.push('/login');    
-                  return;
-                }
                 let ress = res.data;
                 callback(ress);
             }).catch((error)=>{   

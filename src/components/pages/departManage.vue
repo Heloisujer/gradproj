@@ -1,11 +1,14 @@
 <template>
     <div class="departManage-main" style="width:1000px;margin:0 auto;">
-        <el-table
+        <!-- <el-table
             :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            style="width: 100%"> -->
+        <el-table
+            :data="tableData"  
             style="width: 100%">
             <el-table-column
             label="院系名称"
-            prop="name"
+            prop="departmentName"
             width="500px">
             </el-table-column>
             <el-table-column
@@ -59,8 +62,8 @@
             >       
             <el-form :model="row" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
 
-                <el-form-item label="院系名称" prop="name" class="eInputBoxs">
-                <el-input v-model="row.name"></el-input>
+                <el-form-item label="院系名称" prop="departmentName" class="eInputBoxs">
+                <el-input v-model="row.departmentName"></el-input>
                 </el-form-item>
                
             </el-form>
@@ -76,25 +79,24 @@
 export default {
     data() {
       return {
+            departmentId:'',
             dialogVal:{
                 activeIndex:-1,
                 dialogVisible: false,  
             },
             row:{
-                username:"",
-                name:'',
+                id:"",
+                departmentName:'',
             },
             rules:{
-                name: [
+                departmentName: [
                     { required: true, message: '请输入院系名称', trigger: 'blur' },
                     { max:13, message: ' 13 个字符以内', trigger: 'blur' }
                 ],
             },
             tableData: [{
-                name:'aaa',
-                }, {
-                name:'bbb',
-            }],
+                departmentName:'aaa',
+                }],
             search: '',
             pages:{
                 pageSize:10,
@@ -108,7 +110,7 @@ export default {
             this.$refs.ruleForm.clearValidate();
             this.$refs.ruleForm.resetFields(); 
             this.row = {
-                name:'',
+                departmentName:'',
             };
             this.dialogVal.dialogVisible = false;
         },
@@ -131,33 +133,117 @@ export default {
             this.addData();       
             }         
         },
+        editData(){
+            let row  = this.row;
+            console.log(this.departmentId)
+            console.log(this.departmentId)
+            console.log(this.departmentId)
+            let data = {
+                departmentId:this.departmentId,
+                name:row.departmentName,
+            };
+            this.$getData('post','/departmen/save',data,(res)=>{
+                if(res.code == 200){
+                    this.getData();
+                    this.clearState();
+                    this.$message({
+                        message: '院系修改成功!',
+                        type: 'success'
+                    }); 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            })
+        },
+        ckDepart(){
+            this.pages={
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            };
+            this.getData();
+            if(this.search=""){
+                this.$router.go(-1)
+            }
+        },
+        addData(){
+            let row  = this.row;
+            console.log(row)
+            let data = {
+                name:row.departmentName,
+            };
+            this.$getData('post','/departmen/save',data,(res)=>{
+            if(res.code == 200){
+                this.getData();
+                this.clearState();
+                this.$message({
+                    message: '院系新增成功!',
+                    type: 'success'
+                }); 
+            }else{
+                this.$message.error(res.msg);
+            }
+            })
+        },
         modifyDepart(index, row) {
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
-            this.row.name = row.name;
-            console.log(index, row);
+            this.row.departmentName = row.departmentName;
+            console.log(row.departmentName)
+            this.departmentId = row.id;
+            console.log(index, this.departmentId);
         },
         stopDepart(index, row) {
-            this.dialogVal.name = '';
             console.log(index, row);
         },
         addDepart(){
             this.dialogVal= {
                 activeIndex:-1,
                 dialogVisible: true, 
-                name:this.dialogVal.name,
+                row:{
+                    departmentName:""
+                } 
             } 
         },
-        ckDepart(){},
         handleCurrentChange(val) {
             this.pages.pageNums = val;
-            // this.getData();
+            this.getData();
+
         },
         handleSizeChange(val) {
             this.pages.pageSize = val;
-            // this.getData();
+            this.getData();
         },
-    }
+        getData(){
+            console.log(this.pages.pageSize)
+            console.log(this.search)
+            this.$getData('get','/department/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.search},(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    console.log(data.totalCount)
+                    this.pages.total = data.totalCount;
+                    let attrs = [];
+                    console.log(data.list)
+                    let lists = data.list;
+                    lists.map((v,i)=>{
+                      let obj = {
+                        id: v.departmentId,
+                        departmentName: v.departmentName,  
+                        // enable:v.enable,   
+                      };
+                      attrs.push(obj);
+                    }); 
+                    this.tableData = [];
+                    this.tableData = attrs; 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
+        }
+    },
+    mounted(){
+        this.getData();
+    },
 }
 </script>
 

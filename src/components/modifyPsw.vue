@@ -57,7 +57,7 @@ export default {
               { required: true, validator: CheckPsd, trigger: 'blur' }
           ]
       },
-    //   user_id:JSON.parse(sessionStorage.getItem('user')).userCode,
+      user_id:sessionStorage.getItem('userId'),
     }
   },
   methods:{
@@ -66,29 +66,30 @@ export default {
         },
         editPwd(){
           
-        //   if((this.ruleForm.password).length<8 ||(this.ruleForm.password).length>16 || this.ruleForm.password !=this.ruleForm.confrimPassword || (this.ruleForm.code).toLowerCase() !=(this.codes).toLowerCase()){
-        //     return console.log(this.ruleForm,this.codes);
-        //   }
-        //   var data = {
-        //     userCode:this.user_id,
-        //     userPwd:md5(this.ruleForm.password)
-        //   }
-        //   this.$getData("post",'/sysUser/updateSysUserPwd',data,(res) => {
-        //     let data = res.data;
-        //     let result = data.result;
-        //     if(data.code ==200){
-        //       this.$message({
-        //         message: data.msg,
-        //         type: 'success'
-        //       });
-        //        this.toPath('/homePage');
-        //     }else{
-        //        this.$message({
-        //         message: data.msg,
-        //         type: 'error'
-        //       });
-        //     }
-        //   });
+          if((this.ruleForm.password).length<6 ||(this.ruleForm.password).length>16 || this.ruleForm.password !=this.ruleForm.confrimPassword || (this.ruleForm.oldPassword).length<6 || (this.ruleForm.oldPassword).length>16){
+            return console.log(this.ruleForm);
+          }
+          var data = {
+            userId:this.user_id,
+            oldPassword:md5(this.ruleForm.oldPassword),
+            newPassword:md5(this.ruleForm.password)
+          }
+          this.$getData("post",'/user/pwd/update',data,(res) => {
+            let data = res.data;
+            // let result = data.result;
+            if(res.code ==200){
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
+               this.$router.push('/homePage');
+            }else{
+               this.$message({
+                message: res.msg,
+                type: 'error'
+              });
+            }
+          });
         }    
     }
 }

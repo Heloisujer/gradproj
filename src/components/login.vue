@@ -104,18 +104,20 @@ export default {
         //    console.log(this.ruleForm.code.length)
             var data = {
                 username:this.ruleForm.username,
-                password:this.ruleForm.password
+                password:md5(this.ruleForm.password)
             }
             this.$getData('post','/login',data,(res) => {
                 console.log(res.code)
                 if(res.code == 200){
-                    console.log(res.data)
-                    console.log(res.data.roleCode)
-                    console.log(res.data.name);
-                    console.log(typeof(res.data.name));
+                    // console.log(res.data)
+                    // console.log(res.data.roleCode)
+                    // console.log(res.data.name);
+                    // console.log(typeof(res.data.name));
                     sessionStorage.setItem('name',res.data.name);
                     // console.log(sessionStorage.name);
-                    sessionStorage.setItem('roleCode',res.data.roleCode);         
+                    sessionStorage.setItem('roleCode',res.data.roleCode);  
+                    sessionStorage.setItem('userId',res.data.userId);
+                    console.log(res.data.token);     
                     if(res.data.roleCode == "role_admin"){
                         this.$router.replace('/superIndex');
                     }

@@ -25,7 +25,7 @@ export default new Router({
       path: '/login',name: '登录',component: Login,
     },
     {
-      path: '/superIndex',name: '',component: SuperIndex,
+      path: '/superIndex',component: SuperIndex, 
       children:[
         {
           path:'/superIndex/manManage',
