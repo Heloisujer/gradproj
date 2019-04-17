@@ -114,6 +114,9 @@ export default {
                     // console.log(res.data.name);
                     // console.log(typeof(res.data.name));
                     sessionStorage.setItem('name',res.data.name);
+                    sessionStorage.setItem('username',res.data.username);
+                    sessionStorage.setItem('jobTitle',res.data.jobTitle);
+                    sessionStorage.setItem('phone',res.data.phone);
                     // console.log(sessionStorage.name);
                     sessionStorage.setItem('roleCode',res.data.roleCode);  
                     sessionStorage.setItem('userId',res.data.userId);

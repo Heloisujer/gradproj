@@ -27,9 +27,15 @@
                 type="warning"
                 @click="modifyDepart(scope.$index, scope.row)">修改</el-button>
                 <el-button
+                v-show="scope.row.enable"
                 size="mini"
                 type="danger"
                 @click="stopDepart(scope.$index, scope.row)">停用</el-button>
+                <el-button
+                v-show="!scope.row.enable"
+                size="mini"
+                type="primary"
+                @click="stopDepart(scope.$index, scope.row)">启用</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -79,6 +85,7 @@
 export default {
     data() {
       return {
+            enable:'',
             departmentId:'',
             dialogVal:{
                 activeIndex:-1,
@@ -194,7 +201,22 @@ export default {
             console.log(index, this.departmentId);
         },
         stopDepart(index, row) {
-            console.log(index, row);
+            this.$getData('post','/departmen/unEnable',{departmentId:row.id},(res) => {
+                console.log(row.id);
+                // let data = res.data;
+                // let result = data.result;
+                if(res.code==200){             
+                // this.tableData.splice(index,1);
+                // this.pages.total--;
+                this.$message({
+                    type: 'success',
+                    message: '操作成功!'
+                });   
+                }else{
+                this.$message.error(res.msg); 
+                }
+            
+            });
         },
         addDepart(){
             this.dialogVal= {
@@ -229,7 +251,7 @@ export default {
                       let obj = {
                         id: v.departmentId,
                         departmentName: v.departmentName,  
-                        // enable:v.enable,   
+                        enable:v.enable,   
                       };
                       attrs.push(obj);
                     }); 

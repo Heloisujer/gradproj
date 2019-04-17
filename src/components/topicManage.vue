@@ -4,8 +4,8 @@
 			<label>请输入院系名称进行查询：</label>
 			<el-input v-model="searchTxt" prefix-icon="el-icon-search"></el-input>
             <el-button size="mini" type="primary" @click="search()">查询</el-button>
-            <el-button size="mini" type="success" @click="addTopic()">+ 新增</el-button>
-            <el-button size="mini" type="info" plain @click="print()">打印</el-button>
+            <el-button size="mini" type="success" @click="addTopic()" v-show="(roleCode=='role_t')">+ 新增</el-button>
+            <el-button size="mini" type="info" plain @click="print()" v-show="(roleCode=='role_admin') || (roleCode=='role_m')">打印</el-button>
 	    </div>
         <div class="tableBox">
             <el-table
@@ -47,32 +47,32 @@
                 width="450">
                 <template slot-scope="scope">
                     <el-button
-                    v-show="(scope.row.state=='a')"
+                    v-show="(scope.row.state=='a')&&(roleCode=='role_t')"
                     size="mini"
                     type="warning"
                     @click="editTopic(scope.$index, scope.row)">修改</el-button>
                     <el-button
-                    v-show="(scope.row.state=='a')"
+                    v-show="(scope.row.state=='a')&&(roleCode=='role_t')"
                     size="mini"
                     type="danger"
                     @click="deleteTopic(scope.$index, scope.row)">删除</el-button>
                     <el-button
-                    v-show="(scope.row.state=='a')"
+                    v-show="(scope.row.state=='a')&&(roleCode=='role_s')"
                     size="mini"
                     type="primary"
                     @click="chooseTopic(scope.$index, scope.row)">选报</el-button>
                     <el-button
-                    v-show="(scope.row.state=='c')"
+                    v-show="(scope.row.state=='c')&&(roleCode=='role_t')"
                     size="mini"
                     type="warning"
                     @click.stop="ckClick(scope.row)">审核</el-button>
                     <el-button
-                    v-show="(scope.row.state=='c')"
+                    v-show="(scope.row.state=='c')&&(roleCode=='role_t')"
                     size="mini"
                     type="primary"
                     @click="download(scope.$index, scope.row)">论文下载</el-button>
                     <el-button
-                    v-show="(scope.row.state=='b')"
+                    v-show="(scope.row.state=='b')&&(roleCode=='role_s')"
                     size="mini"
                     type="primary"
                     @click="upload(scope.$index, scope.row)">论文上传</el-button>
@@ -161,7 +161,7 @@
                     :on-change="handleChange"
                     :file-list="fileList3">
                     <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                 </el-upload>
                 <span slot="footer" class="dialog-footer">
                 <!-- <el-button type="primary" @click="dialogSub">确 定</el-button> -->
@@ -228,6 +228,7 @@
 export default {//查看详情 论文下载 论文上传 删除 修改 选报 审核 新增 打印
     data () {
         return {
+            roleCode:sessionStorage.getItem("roleCode"),
             pages:{
                 pageSize:10,
                 pageNums:1,

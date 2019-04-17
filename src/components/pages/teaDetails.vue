@@ -45,11 +45,11 @@ export default {
     data() {
         return {
             teaInfos:{
-                username:"111",
-                name:"张晓梅",
-                department:"数学",
-                job_title:"教授",
-                phone:"12566784536"
+                username:sessionStorage.getItem("username"),
+                name:sessionStorage.getItem("name"),
+                department:sessionStorage.getItem("department"),
+                job_title:sessionStorage.getItem("jobTitle"),
+                phone:sessionStorage.getItem("phone"),
             },
             dialogEdit: false,
             formLabelWidth: '120px',
@@ -60,14 +60,41 @@ export default {
                 job_title:"教授",
                 phone:"12566784536"
             },
+            userId:''
         }
     },
     methods:{
         editTea() {
             this.dialogEdit = true;
+            this.editform.username = this.teaInfos.username;
+            this.editform.department = this.teaInfos.department;
+            this.editform.name = this.teaInfos.name;
+            this.editform.job_title = this.teaInfos.job_title;
+            this.editform.phone = this.teaInfos.phone;
+            this.userId = sessionStorage.getItem("userId"),
+            console.log(this.userId);
         },
         teaSub() {
             this.dialogEdit = false;
+            // let row  = this.editform;
+            // console.log(this.userId);
+            // let data = {
+            //     userId:this.userId,
+            //     username:row.username,
+            //     name:row.name,
+            // };
+            // this.$getData('post','/manager/save',data,(res)=>{
+            //     if(res.code == 200){
+            //         this.getData();
+            //         this.clearState();
+            //         this.$message({
+            //             message: '修改成功!',
+            //             type: 'success'
+            //         }); 
+            //     }else{
+            //         this.$message.error(res.msg);
+            //     }
+            // })
         },
         editPwd() {
             this.$router.push('/teacherIndex/modifyPsw')

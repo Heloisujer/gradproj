@@ -96,9 +96,9 @@
                 <el-input v-model="row.phone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="所属院系" prop="department" :disabled="disabled">
-                <el-select v-model="row.department" placeholder="请选择所属院系">
-                    <el-option :key="i+v+'department'" v-for="(v,i) in departments " :label="v.txt" :value="v.val"></el-option>
+                <el-form-item label="所属院系" prop="department" class="eInputBoxs">
+                <el-select v-model="row.department" placeholder="请选择所属院系" >
+                    <el-option :key="i+v+'department'" v-for="(v,i) in departments " :label="v.txt" :value="v.val" v-show="v.enable"></el-option>
                 </el-select>
                 </el-form-item>
                
@@ -171,11 +171,11 @@ export default {
     methods:{
         handleCurrentChange(val) {
             this.pages.pageNums = val;
-            // this.getData();
+            this.getData();
         },
         handleSizeChange(val) {
             this.pages.pageSize = val;
-            // this.getData();
+            this.getData();
         },
         clearState(){
             this.$refs.ruleForm.clearValidate();
@@ -237,6 +237,56 @@ export default {
                 department:'',
                 }       
             } 
+        },
+        getDepartmentList(){
+            this.$getData('get','/department/list',{},(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    let attrs = [];
+                    let lists = data.list;
+                    lists.map((v,i)=>{
+                      let obj = {
+                        txt: v.departmentName,
+                        val: v.departmentId,  
+                        enable:v.enable,   
+                      };
+                      attrs.push(obj);
+                    }); 
+                    this.departments = [];
+                    this.departments = attrs; 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
+        },
+        getData(){
+            // console.log(this.pages.pageSize)
+            // console.log(this.searchTxt)
+            this.$getData('get','/student/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.searchTxt},(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    console.log(data.totalCount)
+                    this.pages.total = data.totalCount;
+                    let attrs = [];
+                    let lists = data.list;
+                    lists.map((v,i)=>{
+                      let obj = {
+                        id: v.userId,
+                        name: v.name,     
+                        username: v.username, 
+                        // departmentId: vdepartmentId,
+                        department: v.department,
+                        // jobTitleCode: v.jobTitleCode,
+                        phone: v.phone
+                      };
+                      attrs.push(obj);
+                    }); 
+                    this.tableData = [];
+                    this.tableData = attrs; 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
         }
     }
 }

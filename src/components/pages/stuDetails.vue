@@ -41,10 +41,10 @@ export default {
     data() {
         return {
             stuInfos:{
-                username:"111",
-                name:"张学生",
-                department:"计算机",
-                phone:"12566784536"
+                username:sessionStorage.getItem("username"),
+                name:sessionStorage.getItem("name"),
+                department:sessionStorage.getItem("department"),
+                phone:sessionStorage.getItem("phone"),
             },
             dialogEdit: false,
             formLabelWidth: '120px',
