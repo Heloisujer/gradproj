@@ -1,9 +1,9 @@
 <template>
     <div class="topicManage-main" style="width:1200px;margin:0 auto;">
         <div class="inputBox">
-			<label>请输入院系名称进行查询：</label>
-			<el-input v-model="searchTxt" prefix-icon="el-icon-search"></el-input>
-            <el-button size="mini" type="primary" @click="search()">查询</el-button>
+			<label v-show="(roleCode!='role_t')">请输入导师名称进行查询：</label>
+			<el-input v-model="searchTxt" prefix-icon="el-icon-search" v-show="(roleCode!='role_t')"></el-input>
+            <el-button size="mini" type="primary" @click="search()" v-show="(roleCode!='role_t')">查询</el-button>
             <el-button size="mini" type="success" @click="addTopic()" v-show="(roleCode=='role_t')">+ 新增</el-button>
             <el-button size="mini" type="info" plain @click="print()" v-show="(roleCode=='role_admin') || (roleCode=='role_m')">打印</el-button>
 	    </div>
@@ -36,7 +36,7 @@
                 <el-table-column
                 label="状态">
                 <template slot-scope="scope">
-                    <span class="stateSpan" :style="{'color':scope.row.state=='d'?'#0380FF':'#FF5F58'}">
+                    <span class="stateSpan" :style="{'color':scope.row.state=='4'?'#0380FF':'#FF5F58'}">
                     <span v-text="stateTxt(scope.row.state)"></span>
                     <i v-show="scope.row.state==0" style="color:gray">——</i>
                     </span>     
@@ -47,32 +47,32 @@
                 width="450">
                 <template slot-scope="scope">
                     <el-button
-                    v-show="(scope.row.state=='a')&&(roleCode=='role_t')"
+                    v-show="(scope.row.state=='1')&&(roleCode=='role_t')"
                     size="mini"
                     type="warning"
                     @click="editTopic(scope.$index, scope.row)">修改</el-button>
                     <el-button
-                    v-show="(scope.row.state=='a')&&(roleCode=='role_t')"
+                    v-show="(scope.row.state=='1')&&(roleCode=='role_t')"
                     size="mini"
                     type="danger"
                     @click="deleteTopic(scope.$index, scope.row)">删除</el-button>
                     <el-button
-                    v-show="(scope.row.state=='a')&&(roleCode=='role_s')"
+                    v-show="(scope.row.state=='1')&&(roleCode=='role_s')"
                     size="mini"
                     type="primary"
                     @click="chooseTopic(scope.$index, scope.row)">选报</el-button>
                     <el-button
-                    v-show="(scope.row.state=='c')&&(roleCode=='role_t')"
+                    v-show="(scope.row.state=='3')&&(roleCode=='role_t')"
                     size="mini"
                     type="warning"
                     @click.stop="ckClick(scope.row)">审核</el-button>
                     <el-button
-                    v-show="(scope.row.state=='c')&&(roleCode=='role_t')"
+                    v-show="(scope.row.state=='3')&&(roleCode=='role_t')"
                     size="mini"
                     type="primary"
                     @click="download(scope.$index, scope.row)">论文下载</el-button>
                     <el-button
-                    v-show="(scope.row.state=='b')&&(roleCode=='role_s')"
+                    v-show="(scope.row.state=='2')&&(roleCode=='role_s')"
                     size="mini"
                     type="primary"
                     @click="upload(scope.$index, scope.row)">论文上传</el-button>
@@ -188,7 +188,7 @@
             <el-table
                 border
                 stripe
-                :data="topicData"      
+                :data="printData"      
                 :highlight-current-row='true'>
                 <el-table-column
                 prop="department"
@@ -228,6 +228,7 @@
 export default {//查看详情 论文下载 论文上传 删除 修改 选报 审核 新增 打印
     data () {
         return {
+            userId:sessionStorage.getItem("userId"),
             roleCode:sessionStorage.getItem("roleCode"),
             pages:{
                 pageSize:10,
@@ -266,47 +267,30 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 show:false,
                 radio:'1',
             },
+            printData: [{
+                department: '数学系',
+                topic: '学生成绩管理系统',
+                tname:'王小虎',
+                sname: '李学生',
+                state:'2'
+            }],
             topicData: [{
-                department: '数学系',
-                topic: '学生成绩管理系统',
-                tname:'王小虎',
-                sname: '李学生',
-                state:'a'
-            },
-            {
-                department: '数学系',
-                topic: '学生成绩管理系统',
-                tname:'王小虎',
-                sname: '李学生',
-                state:'b'
-            },
-            {
-                department: '数学系',
-                topic: '学生成绩管理系统',
-                tname:'王小虎',
-                sname: '李学生',
-                state:'c'
-            },
-            {
-                department: '数学系',
-                topic: '学生成绩管理系统',
-                tname:'王小虎',
-                sname: '李学生',
-                state:'d'
-            },
-            {
-                department: '数学系',
-                topic: '学生成绩管理系统',
-                tname:'王小虎',
-                sname: '李学生',
-                state:'e'
+                topicId: '',
+                topic: '',  
+                description: '',
+                tname: '',
+                tId: '',
+                sname: '',
+                department: '',
+                state: '',
+                paperAddress: ''
             }],
             states:[
-                {txt:'可选',val:'a'},   //选报 修改 删除 添加 查看详情
-                {txt:'通过',val:'d'},   //论文下载 查看详情
-                {txt:'未提交',val:'b'},   //论文上传 查看详情
-                {txt:'待审核',val:'c'},   //审核 论文下载 查看详情
-                {txt:'不通过',val:'e'},   ////论文上传 论文下载 查看详情
+                {txt:'可选',val:'1'},   //选报 修改 删除 添加 查看详情
+                {txt:'审核通过',val:'4'},   //论文下载 查看详情
+                {txt:'待提交',val:'2'},   //论文上传 查看详情
+                {txt:'待审核',val:'3'},   //审核 论文下载 查看详情
+                {txt:'审核不通过',val:'5'},   ////论文上传 论文下载 查看详情
             ],
             searchTxt:'',
         }
@@ -396,6 +380,34 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             }
         },
         deleteTopic(index,row){},
+        getData(){
+            this.$getData('get','/topic/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.searchTxt},(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    this.pages.total = data.totalCount;
+                    let attrs = [];
+                    let lists = data.list;
+                    lists.map((v,i)=>{
+                      let obj = {
+                        topicId: v.topicId,
+                        topic: v.name,  
+                        description: v.description,
+                        tname: v.tName,
+                        tId: v.tId,
+                        sname: v.sName,
+                        department: v.tDepartment,
+                        state: v.status,
+                        paperAddress: v.paperAddress
+                      };
+                      attrs.push(obj);
+                    }); 
+                    this.topicData = [];
+                    this.topicData = attrs; 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
+        },
         stateTxt(val){
         let res = '';        
         this.states.map((v,i)=>{
@@ -405,6 +417,9 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         });
         return res;
       },
+    },
+    mounted(){
+        this.getData();
     }
 }
 </script>

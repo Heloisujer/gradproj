@@ -9,7 +9,7 @@
                     <!-- <span class="login-title">攀枝花学院毕业设计管理系统</span> -->
                     <div class="header_username">
                         欢迎您：
-                        <span style="color:red">{{Name}}</span>
+                        <span style="color:red">{{name}}</span>
                         <el-dropdown  @command="handleCommand" style="color:#fff">
                             <span class="el-dropdown-link">
                                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -43,7 +43,7 @@ export default {
     props:['menuList'],
     data(){
         return {
-            Name:sessionStorage.getItem("name"),
+            name:sessionStorage.getItem("name"),
         }
     },
     methods: {
@@ -70,6 +70,14 @@ export default {
                 });          
                 });
             }
+        }
+    },
+    mounted(){
+        let names = sessionStorage.getItem('username');
+        if(names == null&&this.$route.name!=='登录'){
+            alert('请登陆！');
+            this.$router.push('/login');      
+            return;
         }
     }
 }

@@ -25,6 +25,15 @@ export default {
     },
     components:{
         Header
+    },
+    mounted(){
+        let names = sessionStorage.getItem('name');
+        let roles = sessionStorage.getItem('roleCode');
+        if(names == null&&this.$route.name!=='登录'&&roles != "role_m"){
+            alert('请登陆！');
+            this.$router.push('/login');      
+            return;
+        }
     }
 }
 </script>

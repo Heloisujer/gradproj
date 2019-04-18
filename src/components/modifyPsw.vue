@@ -82,7 +82,7 @@ export default {
                 message: res.msg,
                 type: 'success'
               });
-               this.$router.push('/homePage');
+               this.$router.push('/login');
             }else{
                this.$message({
                 message: res.msg,

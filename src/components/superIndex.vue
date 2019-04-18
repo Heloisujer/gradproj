@@ -29,7 +29,8 @@ export default {
     },
     mounted(){
         let names = sessionStorage.getItem('name');
-        if(names == null&&this.$route.name!=='登录'){
+        let roles = sessionStorage.getItem('roleCode');
+        if(names == null&&this.$route.name!=='登录'&&roles != "role_admin"){
             alert('请登陆！');
             this.$router.push('/login');      
             return;
