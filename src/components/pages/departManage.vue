@@ -202,9 +202,6 @@ export default {
         },
         stopDepart(index, row) {
             this.$getData('post','/departmen/unEnable',{departmentId:row.id},(res) => {
-                console.log(row.id);
-                // let data = res.data;
-                // let result = data.result;
                 if(res.code==200){             
                 // this.tableData.splice(index,1);
                 // this.pages.total--;

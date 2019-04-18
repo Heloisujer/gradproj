@@ -29,11 +29,9 @@
                 >
                 </el-table-column>
                 <el-table-column
+                prop="job_title"
                 label="职位"
                 >
-                <!-- <template slot-scope="scope">
-                    <span v-text="$getTxt(positions,scope.row.position)"></span>             
-                </template> -->
                 </el-table-column>
                 <el-table-column
                 prop="phone"
@@ -101,15 +99,15 @@
                 <el-input v-model="row.phone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="所属院系" prop="department" class="eInputBoxs">
+                <el-form-item label="所属院系" prop="department_id" class="eInputBoxs">
                     <el-select v-model="row.department_id" placeholder="请选择所属院系" >
-                        <el-option :key="i+'department'" v-for="(v,i) in departments " :label="v.txt" :value="v.val" v-show="v.enable"></el-option>
+                        <el-option :key="i+v+'department_id'" v-for="(v,i) in departments " :label="v.txt" :value="v.val" v-show="v.enable"></el-option>
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="职位" prop="job_title" class="eInputBoxs">
+                <el-form-item label="职位" prop="job_title_code" class="eInputBoxs">
                     <el-select v-model="row.job_title_code" placeholder="请选择职位">
-                        <el-option :key="i+'job_title'" v-for="(v,i) in job_titles " :label="v.txt" :value="v.val"></el-option>
+                        <el-option :key="i+v+'job_title_code'" v-for="(v,i) in job_titles " :label="v.txt" :value="v.val"></el-option>
                     </el-select>
                 </el-form-item>
                
@@ -168,7 +166,7 @@ export default {
                     { required: true, message: '请输入手机号', trigger: 'blur' },
                     { validator:validatePhone, trigger: 'blur' }
                 ],
-                department: [
+                department_id: [
                     {  required: true, message: '请选择所属院系', trigger: 'change'},
                 ],
             },
@@ -204,7 +202,9 @@ export default {
                 password:"",
                 name:'',
                 phone: '',
+                department_id:'',
                 department:'',
+                job_title_code:'',
                 job_title:''
             };
             this.dialogVal.dialogVisible = false;
@@ -229,12 +229,8 @@ export default {
             }         
         },
         editData(){
-            console.log(this.part, "submit");
+            // console.log(this.part, "submit");
             let row  = this.row;
-            //let jobTitleCode = this.$getVal(this.job_titles,this.row.job_title);
-            //let departmentId =this.$getVal(this.departments,this.row.department);
-            //console.log(this.row.job_title);
-            // console.log(departmentId);
             let data = {
                 userId:this.userId,
                 username:row.username,
@@ -261,13 +257,11 @@ export default {
             if(Number(row.username.length)<3){
                 return  this.$message.error("用户账号符最小为3位！");
             }
-            let jobTitleCode = this.$getVal(this.job_titles,this.row.job_title);
-            let departmentId =this.$getVal(this.departments,this.row.department);
             let data = {
                 username:row.username,
                 name:row.name,//用户名称
-                departmentId:departmentId,
-                jobTitleCode:jobTitleCode,
+                departmentId:row.department_id,
+                jobTitleCode:row.job_title_code,
                 phone:row.phone,
                 password:md5(row.password),
             };
@@ -308,13 +302,6 @@ export default {
             this.row.job_title_code = row.job_title_code;
             this.row.job_title = row.job_title;
             this.userId = row.id;
-            let departmentId =this.$getVal(this.departments,this.row.department);
-            // console.log(this.$getVal(this.job_titles,this.row.job_title));
-            // console.log(this.$getVal(this.departments,this.row.department))
-            // console.log(departmentId);
-            // setTimeout(()=>{
-            //     this.$refs.ruleForm.clearValidate(); 
-            // },2);
         },
         addTea(){
             this.ok = true;
@@ -341,9 +328,7 @@ export default {
             type: 'warning'
             }).then(() => {
             this.$getData('post','/user/delete',{userId:row.id},(res) => {
-                console.log(row.id);
-                // let data = res.data;
-                // let result = data.result;
+                // console.log(row.id);
                 if(res.code==200){             
                 this.tableData.splice(index,1);
                 this.pages.total--;
@@ -372,7 +357,6 @@ export default {
                 };
                 this.$getData('post','/user/pwd/reset',data,(res)=>{
                 let data = res.data;
-                // let result = data.result;
                 if(res.code == 200){
                     console.log(data.notice)
                     this.$message({
@@ -410,7 +394,7 @@ export default {
             });
         },
         getDepartmentList(){
-            this.$getData('get','/department/list',{},(res) => {
+            this.$getData('get','/department/list',{departmentName:'',departmentId:''},(res) => {
                 let data = res.data;
                 if(res.code==200){
                     let attrs = [];
@@ -432,12 +416,9 @@ export default {
             });
         },
         getData(){
-            // console.log(this.pages.pageSize)
-            // console.log(this.searchTxt)
             this.$getData('get','/teacher/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.searchTxt},(res) => {
                 let data = res.data;
                 if(res.code==200){
-                    // console.log(data.totalCount)
                     this.pages.total = data.totalCount;
                     let attrs = [];
                     let lists = data.list;
