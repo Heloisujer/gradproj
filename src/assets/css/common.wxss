@@ -1,0 +1,73 @@
+.flexSpaceBetween {
+  display: flex;
+  justify-content: space-between;
+}
+/*头部样式*/
+.wrap-main-header {
+  height: 55px;
+  line-height: 55px;
+  background: #333;
+}
+.wrap-main-header .header-all {
+  display: flex;
+  justify-content: space-between;
+  width: 86.66%;
+  margin-left: 6.04%;
+}
+.wrap-main-header .header-all .logo-img {
+  width: 20.91%;
+  height: 20px;
+  margin-top: 18px;
+}
+.wrap-main-header .header-all ul {
+  display: flex;
+  justify-content: space-between;
+  width: 31.37%;
+  color: #fff;
+}
+/*底部样式*/
+.wrap-main-footer {
+  height: 500px;
+  width: 100%;
+  color: #fff;
+}
+.wrap-main-footer .footer-all {
+  display: flex;
+  justify-content: space-between;
+  width: 60.89%;
+  margin-left: 19.68%;
+  height: 100%;
+}
+.wrap-main-footer .footer-all .left-area {
+  margin-top: 147px;
+}
+.wrap-main-footer .footer-all .left-area .title {
+  font-size: 30px;
+}
+.wrap-main-footer .footer-all .left-area .content {
+  margin-top: 30px;
+  font-size: 20px;
+}
+.wrap-main-footer .footer-all .right-area {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 147px;
+}
+.wrap-main-footer .footer-all .right-area .code .code-img {
+  width: 100px;
+  height: 100px;
+}
+.wrap-main-footer .footer-all .right-area .code p {
+  width: 98px;
+  height: 36px;
+  margin-top: 10px;
+  line-height: 36px;
+  background: #0066CC;
+  text-align: center;
+  font-size: 16px;
+}
+.print_title {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 20px;
+}

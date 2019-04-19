@@ -183,41 +183,43 @@
             </div>
         </el-dialog>
         <el-dialog 
-            title=""
             :visible.sync="printInfo.show">
-            <el-table
-                border
-                stripe
-                :data="printData"      
-                :highlight-current-row='true'>
-                <el-table-column
-                prop="department"
-                label="院系"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="topic"
-                label="课题名称"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="tname"
-                label="导师姓名"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="sname"
-                label="学生姓名">
-                </el-table-column>
-                <el-table-column
-                label="状态">
-                <template slot-scope="scope">
-                    <span v-text="stateTxt(scope.row.state)"></span>  
-                </template>
-                </el-table-column>
-            </el-table>
+            <div >
+                <div class="print_title" id="printTable">攀枝花学院毕业设计选题情况表</div>
+                <el-table
+                    border
+                    stripe
+                    :data="printData"      
+                    :highlight-current-row='true'>
+                    <el-table-column
+                    prop="department"
+                    label="院系"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="topic"
+                    label="课题名称"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="tname"
+                    label="导师姓名"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="sname"
+                    label="学生姓名">
+                    </el-table-column>
+                    <el-table-column
+                    label="状态">
+                    <template slot-scope="scope">
+                        <span v-text="stateTxt(scope.row.state)"></span>  
+                    </template>
+                    </el-table-column>
+                </el-table>
+            </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogPrint()">确 定</el-button>
+                <el-button type="primary" v-print="'#printTable'">打 印</el-button>
                 <el-button @click="printInfo.show = false">取 消</el-button>
             </span>
         </el-dialog>
@@ -259,6 +261,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             row:{
                 topic:"",
                 topicDetail:'', 
+                topicId:''
             },
             upDialog:{
                 show:false,
@@ -298,16 +301,27 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
     methods:{
         handleCurrentChange(val) {
             this.pages.pageNums = val;
-            // this.getData();
+            this.getData();
         },
         handleSizeChange(val) {
             this.pages.pageSize = val;
-            // this.getData();
+            this.getData();
+        },
+        search(){
+            this.pages={
+                pageSize:10,
+                pageNums:1,
+                total:0,
+            };
+            this.getData();
+            if(this.searchTxt=""){
+                this.$router.go(-1)
+            }
         },
         print(){
             this.printInfo.show = true;
+            this.printData = this.topicData;     
         },
-        dialogPrint(){},
         handleChange(file, fileList) {
             this.fileList3 = fileList.slice(-3);
         },
@@ -358,14 +372,54 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             this.addData();       
             }         
         },
+        editData(){
+            let row  = this.row;
+            console.log(row.topicId)
+            let data = {
+                userId:this.userId,
+                topicId:row.topicId,
+                name:row.topic,
+                description:row.topicDetail
+            };
+            this.$getData('post','/topic/save',data,(res)=>{
+                if(res.code == 200){
+                    this.getData();
+                    this.clearState();
+                    this.$message({
+                        message: '修改成功!',
+                        type: 'success'
+                    }); 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            })
+        },
+        addData(){
+            let row  = this.row;
+            let data = {
+                userId:this.userId,
+                name:row.topic,
+                description:row.topicDetail
+            };
+            this.$getData('post','/topic/save',data,(res)=>{
+            if(res.code == 200){
+                this.getData();
+                this.clearState();
+                this.$message({
+                    message: '新增成功!',
+                    type: 'success'
+                }); 
+            }else{
+                this.$message.error(res.msg);
+            }
+            })
+        },
         editTopic(index,row){
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
+            this.row.topicId = row.topicId;
             this.row.topic = row.topic;
-            this.row.topicDetail = row.topicDetail;
-            // setTimeout(()=>{
-            //     this.$refs.ruleForm.clearValidate();
-            // },2);
+            this.row.topicDetail = row.description;
         },
         addTopic(){
             this.disabled = false;
@@ -381,7 +435,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         },
         deleteTopic(index,row){},
         getData(){
-            this.$getData('get','/topic/list',{page:this.pages.pageNums,size:this.pages.pageSize,name:this.searchTxt},(res) => {
+            this.$getData('get','/topic/list',{page:this.pages.pageNums,size:this.pages.pageSize, userId:this.userId,tName:this.searchTxt},(res) => {
                 let data = res.data;
                 if(res.code==200){
                     this.pages.total = data.totalCount;
@@ -402,6 +456,12 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                       attrs.push(obj);
                     }); 
                     this.topicData = [];
+                    // console.log(attrs)
+                    for (let i = 0; i < attrs.length; i++) {
+                        if (attrs[i].state=="1") {
+                            attrs[i].sname="/";
+                        }  
+                    }
                     this.topicData = attrs; 
                 }else{
                     this.$message.error(res.msg);

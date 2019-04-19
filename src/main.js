@@ -6,6 +6,9 @@ import ElementUI from 'element-ui';
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css';
 
+import Print from 'vue-print-nb'
+Vue.use(Print);
+
 import axios from 'axios';
 import qs from 'qs';
 //引入公共js文件

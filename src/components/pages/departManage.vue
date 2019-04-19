@@ -103,6 +103,7 @@ export default {
             },
             tableData: [{
                 departmentName:'aaa',
+                enable:''
                 }],
             search: '',
             pages:{
@@ -201,8 +202,10 @@ export default {
             console.log(index, this.departmentId);
         },
         stopDepart(index, row) {
-            this.$getData('post','/departmen/unEnable',{departmentId:row.id},(res) => {
-                if(res.code==200){             
+            console.log(row.enable)
+            this.$getData('post','/departmen/enable',{departmentId:row.id,enable:!row.enable},(res) => {
+                if(res.code==200){           
+                    this.getData();  
                 // this.tableData.splice(index,1);
                 // this.pages.total--;
                 this.$message({
