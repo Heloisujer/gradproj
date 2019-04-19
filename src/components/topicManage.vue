@@ -184,8 +184,8 @@
         </el-dialog>
         <el-dialog 
             :visible.sync="printInfo.show">
-            <div >
-                <div class="print_title" id="printTable">攀枝花学院毕业设计选题情况表</div>
+            <div id="printTable">
+                <div class="print_title">攀枝花学院毕业设计选题情况表</div>
                 <el-table
                     border
                     stripe

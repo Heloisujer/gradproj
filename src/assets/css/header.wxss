@@ -1,0 +1,85 @@
+.header_main .el-header {
+  width: 100%;
+  height: 64px;
+  padding: 0;
+  background: #00aaeb;
+}
+.header_main .header_logo {
+  width: 120px;
+  height: 64px;
+  background: #ffffff;
+}
+.header_main .header_logo .icon_logo {
+  width: 56px;
+  height: 56px;
+  margin-top: 2px;
+  margin-left: 30px;
+}
+.header_main .el-header .el-badge__content.is-fixed {
+  position: absolute;
+  top: 19px;
+  right: 15px;
+}
+.header_main .header_head .login-title {
+  position: absolute;
+  top: 0;
+  left: 150px;
+  font-size: 30px;
+  line-height: 64px;
+  color: #ffffff;
+}
+.header_main .header_head span:hover {
+  height: 20px;
+  background: #00aaeb;
+}
+.header_main .header_head .header_username {
+  position: absolute;
+  top: 0;
+  right: 10%;
+  height: 20px;
+  line-height: 64px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+}
+.header_main .header_head .header_username .el-dropdown {
+  font-size: 16px;
+}
+.header_main .header_head .header_username .el-dropdown .el-dropdown-selfdefine {
+  background: #00aaeb;
+}
+.header_main .el-aside {
+  height: 650px;
+  border: 1px solid #e7e6e6;
+  float: left;
+}
+.header_main a {
+  vertical-align: middle;
+  color: #303133;
+  text-decoration: none;
+}
+.header_main .router-link-active {
+  color: #409EFF;
+}
+.el-menu-item {
+  padding-left: 10px !important;
+  border-bottom: 1px solid #e7e6e6;
+}
+.el-menu-item .sidemenu-text {
+  margin-left: -6px;
+}
+.el-main {
+  width: 93%;
+  height: 92%;
+  position: absolute;
+  top: 50px;
+  left: 110px;
+  overflow: hidden;
+  float: right;
+}
+.main_table {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  box-sizing: border-box;
+}

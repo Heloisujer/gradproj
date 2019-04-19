@@ -3,13 +3,13 @@
         <el-container>
             <el-header>
                 <div class="header_logo">
-                    <!-- <img src="/static/images/logo.jpg" alt="" class="icon_logo"> -->
+                    <img src="/static/images/logo.jpg" alt="" class="icon_logo">
                 </div>
                 <div class="header_head">
                     <!-- <span class="login-title">攀枝花学院毕业设计管理系统</span> -->
                     <div class="header_username">
                         欢迎您：
-                        <span style="color:red">{{name}}</span>
+                        <span style="font-weight:550">{{name}}</span>
                         <el-dropdown  @command="handleCommand" style="color:#fff">
                             <span class="el-dropdown-link">
                                 <i class="el-icon-arrow-down el-icon--right"></i>
