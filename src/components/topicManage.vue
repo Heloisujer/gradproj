@@ -157,7 +157,7 @@
             :before-close="upClose">
                 <el-upload
                     class="upload-demo"
-                    action=""
+                    :action="UploadUrl()"
                     :on-change="handleChange"
                     :file-list="fileList3">
                     <el-button size="small" type="primary">点击上传</el-button>
@@ -253,7 +253,8 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 username:"",
                 sphone:"",
             },
-            fileList3: [{name: '', url: ''}],
+            // fileList3: [{name: '', url: ''}],
+            fileList3: [],
             dialogVal:{
                 activeIndex:-1,
                 dialogVisible: false,  
@@ -300,6 +301,21 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         }
     },
     methods:{
+        UploadUrl(){
+            return "/topic/uploadPaper";
+        },
+        download(index,row){
+            this.$getData('get','/topic/downloadPaper',{topicId:row.topicId},(res) => {
+                if(res.code==200){
+                    this.$message({
+                    type: 'success',
+                    message: '操作成功!'
+                    }); 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
+        },
         handleCurrentChange(val) {
             this.pages.pageNums = val;
             this.getData();
