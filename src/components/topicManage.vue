@@ -145,7 +145,7 @@
                     </el-col>
                 </el-row>
                 <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogSub">确 定</el-button>
+                <el-button type="primary" @click="dialogCheck()">确 定</el-button>
                 <el-button @click="handleClose">取 消</el-button>
                 </span>
         </el-dialog>
@@ -253,7 +253,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 username:"",
                 sphone:"",
             },
-            fileList3: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+            fileList3: [{name: '', url: ''}],
             dialogVal:{
                 activeIndex:-1,
                 dialogVisible: false,  
@@ -269,6 +269,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             dialog:{
                 show:false,
                 radio:'1',
+                topicId:''
             },
             printData: [{
                 department: '数学系',
@@ -334,12 +335,36 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         handleClose(){
             this.dialog.show = false;
         },
-        dialogSub(){},
+        dialogCheck(){
+            let status = 4;
+            if (this.dialog.radio == "1") {
+                status = 4;
+            }else {
+                status = 5;
+            }
+            let data = {
+                topicId:this.dialog.topicId,
+                status:status
+            };
+            this.$getData('post','/topic/validate',data,(res)=>{
+                if(res.code == 200){
+                    this.getData();
+                    // this.clearState();
+                    this.$message({
+                        message: '审核成功!',
+                        type: 'success'
+                    }); 
+                }else{
+                    this.$message.error(res.msg);
+                }
+            })
+        },
         ckClick(row){
             this.dialog={
                 show:true,
                 radio:'1',
             }
+            this.dialog.topicId = row.topicId;
         },
         clearState(){
             this.$refs.ruleForm.clearValidate();
@@ -352,6 +377,26 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         },
         seeMore(row){
             this.seeDialog.show = true;
+            this.$getData('get','/topic/detail',{topicId:row.topicId},(res) => {
+                let data = res.data;
+                if(res.code==200){
+                    this.allInfos.topic = data.name;
+                    this.allInfos.topicDetail = data.description;
+                    this.allInfos.tname = data.tName;
+                    this.allInfos.tphone = data.tPhone;
+                    this.allInfos.username = data.sUserName;
+                    this.allInfos.sname = data.sName;
+                    this.allInfos.sphone = data.sPhone;
+                    this.allInfos.department = data.tDepartment;
+                    if (data.sUserName == null) {
+                        this.allInfos.username ="/";
+                        this.allInfos.sphone ="/";
+                        this.allInfos.sname ="/";
+                    }
+                }else{
+                    this.$message.error(res.msg);
+                }
+            });
         },
         edit(){
             let res = false;
@@ -414,6 +459,24 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             }
             })
         },
+        chooseTopic(index,row){
+            let data = {
+                topicId:row.topicId,
+                sId:this.userId,
+            };
+            this.$getData('post','/topic/sign',data,(res)=>{
+            if(res.code == 200){
+                this.getData();
+                // this.clearState();
+                this.$message({
+                    message: '选报成功!',
+                    type: 'success'
+                }); 
+            }else{
+                this.$message.error(res.msg);
+            }
+            })
+        },
         editTopic(index,row){
             this.dialogVal.activeIndex = index;
             this.dialogVal.dialogVisible = true;
@@ -433,7 +496,30 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 }       
             }
         },
-        deleteTopic(index,row){},
+        deleteTopic(index,row){
+            this.$confirm('删除后删除后此课题将不存在！', `是否删除课题${row.topic}`, {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+            this.$getData('post','/topic/delete',{topicId:row.topicId},(res) => {
+                if(res.code==200){             
+                this.topicData.splice(index,1);
+                this.pages.total--;
+                this.$message({
+                    type: 'success',
+                    message: '课题删除成功!'
+                });   
+                }else{
+                this.$message.error(res.msg); 
+                }
+            
+            });
+            
+            }).catch(() => {
+                    
+            });
+        },
         getData(){
             this.$getData('get','/topic/list',{page:this.pages.pageNums,size:this.pages.pageSize, userId:this.userId,tName:this.searchTxt},(res) => {
                 let data = res.data;
