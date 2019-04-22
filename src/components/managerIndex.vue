@@ -19,7 +19,8 @@ export default {
                 {menuI:'/managerIndex/stuManage',menuName:'学生管理',menuImages: "el-icon-document"},
                 {menuI:'/managerIndex/departManage',menuName:'院系管理',menuImages: "el-icon-rank"},
                 {menuI:'/managerIndex/topicManage',menuName:'课题管理',menuImages: "el-icon-edit-outline"},
-                {menuI:'/managerIndex/systemManage',menuName:'系统设置',menuImages: "el-icon-setting"}
+                {menuI:'/managerIndex/systemManage',menuName:'系统设置',menuImages: "el-icon-setting"},
+                {menuI:'/managerIndex/modifyPsw',menuName:'修改密码',menuImages: "el-icon-info"}
             ]
         }
     },

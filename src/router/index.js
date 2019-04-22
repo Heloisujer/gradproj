@@ -75,6 +75,10 @@ export default new Router({
         {
           path:'/managerIndex/topicManage',
           component:TopicManage
+        },
+        {
+          path:'/managerIndex/modifyPsw',
+          component:ModifyPsw
         }
       ]
     },

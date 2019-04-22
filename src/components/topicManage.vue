@@ -72,7 +72,7 @@
                     type="primary"
                     @click="download(scope.$index, scope.row)">论文下载</el-button>
                     <el-button
-                    v-show="(scope.row.state=='2')&&(roleCode=='role_s')"
+                    v-show="(scope.row.state=='2'||scope.row.state=='5')&&(roleCode=='role_s')"
                     size="mini"
                     type="primary"
                     @click="upload(scope.$index, scope.row)">论文上传</el-button>
@@ -157,14 +157,23 @@
             :before-close="upClose">
                 <el-upload
                     class="upload-demo"
-                    :action="UploadUrl()"
-                    :on-change="handleChange"
-                    :file-list="fileList3">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                    ref="upload"
+                    action="/api/topic/uploadPaper"
+                    :on-preview="handlePreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-remove="handleRemove"
+                    :file-list="fileList"
+                    :auto-upload = 'false'  
+                    :on-success = 'handleSuccess'                  
+                    :data='{
+                        topicId:topicData[0].topicId
+                    }'
+                    >
+                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传doc/docx文件</div>
                 </el-upload>
                 <span slot="footer" class="dialog-footer">
-                <!-- <el-button type="primary" @click="dialogSub">确 定</el-button> -->
                 <el-button @click="upClose">取 消</el-button>
                 </span>
         </el-dialog>
@@ -174,7 +183,8 @@
             <div class="see_more">
                 <p>院系名称：<span v-text="allInfos.department"></span></p>
                 <p>课题名称：<span v-text="allInfos.topic"></span></p>
-                <p>课题详情：<span v-text="allInfos.topicDetail"></span></p>
+                <p v-show="(roleCode=='role_m')||(roleCode=='role_admin')">课题详情：<span v-text="allInfos.topicDetail"></span></p>
+                <p>导师工号：<span v-text="allInfos.tusername"></span></p>
                 <p>导师姓名：<span v-text="allInfos.tname"></span></p>
                 <p>导师电话：<span v-text="allInfos.tphone"></span></p>
                 <p>学生姓名：<span v-text="allInfos.sname"></span></p>
@@ -247,14 +257,14 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 department:"",
                 topic:"",
                 topicDetail:"",
+                tusername:"",
                 tname:"",
                 tphone:"",
                 sname:"",
                 username:"",
                 sphone:"",
             },
-            // fileList3: [{name: '', url: ''}],
-            fileList3: [],
+            fileList: [],
             dialogVal:{
                 activeIndex:-1,
                 dialogVisible: false,  
@@ -301,20 +311,72 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         }
     },
     methods:{
-        UploadUrl(){
-            return "/topic/uploadPaper";
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+    
+        beforeAvatarUpload(file) {
+            let doc = file.name.split('.');
+            if(doc[1] === 'doc'||doc[1] === 'docx'){
+            return file
+            }else {
+            this.$message.error('上传文件只能是 doc/docx 格式!')
+            return false
+            }   
+        },
+        handleRemove(file, fileList) {
+        },
+        handlePreview(file) {
+        },
+        handleSuccess(res,file,fileList){
+            if(res.code==200){
+            this.getData();
+            this.$message({
+                message: '上传成功！',
+                type: 'success'
+            });
+            }else {
+            this.$message({
+                message: res.msg,
+                type: 'error'
+            });
+            }
         },
         download(index,row){
-            this.$getData('get','/topic/downloadPaper',{topicId:row.topicId},(res) => {
-                if(res.code==200){
-                    this.$message({
-                    type: 'success',
-                    message: '操作成功!'
-                    }); 
-                }else{
-                    this.$message.error(res.msg);
-                }
-            });
+
+            let data = {
+                topicId:row.topicId,
+            };
+            let urls = '/api/topic/downloadPaper';
+            urls = urls+'?';
+            for(let key in data){
+                urls+=key+'='+data[key]+'&'
+            }
+            urls = urls.slice(0,-1);
+            
+            this.$http({
+                method:"get",
+                url:urls,
+                responseType:'blob'
+                }).then((res)=>{
+                //这里res.data是返回的blob对象
+                    var blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8'}); 
+                    var contentDisposition = res.headers['content-disposition'];  //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
+                    var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+                    var result = patt.exec(contentDisposition);
+                    var filename = result[1];
+                    console.log(filename)
+                    // var filename = row.topic;
+                    var downloadElement = document.createElement('a');
+                    var href = window.URL.createObjectURL(blob); //创建下载的链接
+                    downloadElement.style.display = 'none';
+                    downloadElement.href = href;
+                    downloadElement.download =filename ; //下载后文件名
+                    document.body.appendChild(downloadElement);
+                    downloadElement.click(); //点击下载
+                    document.body.removeChild(downloadElement); //下载完成移除元素
+                    window.URL.revokeObjectURL(href); //释放掉blob对象
+            })
         },
         handleCurrentChange(val) {
             this.pages.pageNums = val;
@@ -338,9 +400,6 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         print(){
             this.printInfo.show = true;
             this.printData = this.topicData;     
-        },
-        handleChange(file, fileList) {
-            this.fileList3 = fileList.slice(-3);
         },
         upClose(){
             this.upDialog.show = false;
@@ -400,6 +459,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                     this.allInfos.topicDetail = data.description;
                     this.allInfos.tname = data.tName;
                     this.allInfos.tphone = data.tPhone;
+                    this.allInfos.tusername =data.tUserName;
                     this.allInfos.username = data.sUserName;
                     this.allInfos.sname = data.sName;
                     this.allInfos.sphone = data.sPhone;
