@@ -57,6 +57,8 @@ export default {
                 department:sessionStorage.getItem("department"),
                 job_title:sessionStorage.getItem("jobTitle"),
                 phone:sessionStorage.getItem("phone"),
+                department_id:sessionStorage.getItem("departmentId"),
+                job_title_code:sessionStorage.getItem("jobTitleCode"),
             },
             dialogEdit: false,
             formLabelWidth: '120px',
@@ -93,9 +95,10 @@ export default {
             let editform  = this.editform;
             let data = {
                 userId:this.userId,
-                // username:editform.username,
+                username:editform.username,
                 name:editform.name,
-                // departmentId:editform.department_id,
+                jobTitleCode:this.teaInfos.job_title_code,
+                departmentId:this.teaInfos.department_id,
                 phone:editform.phone
             };
             this.$getData('post','/teacher/save',data,(res)=>{

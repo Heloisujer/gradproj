@@ -16,11 +16,13 @@
                 style="width: 1200px">
                 <el-table-column
                 prop="department"
+                width="200px"
                 label="院系"
                 >
                 </el-table-column>
                 <el-table-column
                 prop="topic"
+                width="250px"
                 label="课题名称"
                 >
                 </el-table-column>
@@ -38,7 +40,7 @@
                 <template slot-scope="scope">
                     <span class="stateSpan" :style="{'color':scope.row.state=='4'?'#0380FF':'#FF5F58'}">
                     <span v-text="stateTxt(scope.row.state)"></span>
-                    <i v-show="scope.row.state==0" style="color:gray">——</i>
+                    <!-- <i v-show="scope.row.state==0" style="color:gray">——</i> -->
                     </span>     
                 </template>
                 </el-table-column>
@@ -77,6 +79,7 @@
                     type="primary"
                     @click="upload(scope.$index, scope.row)">论文上传</el-button>
                     <el-button
+                    v-show="(scope.row.state!=0)"
                     size="mini"
                     @click="seeMore(scope.row)">查看详情</el-button>
                 </template>
@@ -166,7 +169,7 @@
                     :auto-upload = 'false'  
                     :on-success = 'handleSuccess'                  
                     :data='{
-                        topicId:topicData[0].topicId
+                        topicId:upDialog.topicId
                     }'
                     >
                     <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -183,8 +186,8 @@
             <div class="see_more">
                 <p>院系名称：<span v-text="allInfos.department"></span></p>
                 <p>课题名称：<span v-text="allInfos.topic"></span></p>
-                <p v-show="(roleCode=='role_m')||(roleCode=='role_admin')">课题详情：<span v-text="allInfos.topicDetail"></span></p>
-                <p>导师工号：<span v-text="allInfos.tusername"></span></p>
+                <p>课题详情：<span v-text="allInfos.topicDetail"></span></p>
+                <p v-show="(roleCode=='role_m')||(roleCode=='role_admin')||(roleCode=='role_t')">导师工号：<span v-text="allInfos.tusername"></span></p>
                 <p>导师姓名：<span v-text="allInfos.tname"></span></p>
                 <p>导师电话：<span v-text="allInfos.tphone"></span></p>
                 <p>学生姓名：<span v-text="allInfos.sname"></span></p>
@@ -276,6 +279,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
             },
             upDialog:{
                 show:false,
+                topicId:''
             },
             dialog:{
                 show:false,
@@ -362,11 +366,11 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 //这里res.data是返回的blob对象
                     var blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8'}); 
                     var contentDisposition = res.headers['content-disposition'];  //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-                    var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
-                    var result = patt.exec(contentDisposition);
-                    var filename = result[1];
-                    console.log(filename)
-                    // var filename = row.topic;
+                    // var patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+                    // var result = patt.exec(contentDisposition);
+                    // var filename = result[1];
+                    // console.log(filename)
+                    var filename = row.sname+"+"+row.topic;
                     var downloadElement = document.createElement('a');
                     var href = window.URL.createObjectURL(blob); //创建下载的链接
                     downloadElement.style.display = 'none';
@@ -406,6 +410,7 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
         },
         upload(index,row){
             this.upDialog.show = true;
+            this.upDialog.topicId = row.topicId;
         },
         handleClose(){
             this.dialog.show = false;
@@ -566,14 +571,14 @@ export default {//查看详情 论文下载 论文上传 删除 修改 选报 �
                 activeIndex:-1, 
                 dialogVisible: true, 
                 row:{
-                id:'',
+                topicId:'',
                 topic:"",
                 topicDetail:'',
                 }       
             }
         },
         deleteTopic(index,row){
-            this.$confirm('删除后删除后此课题将不存在！', `是否删除课题${row.topic}`, {
+            this.$confirm(`删除后${row.topic}课题将不存在！`, `是否删除课题`, {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

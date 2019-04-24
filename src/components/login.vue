@@ -107,7 +107,7 @@ export default {
                 password:md5(this.ruleForm.password)
             }
             this.$getData('post','/login',data,(res) => {
-                console.log(res.code)
+                // console.log(res.code)
                 if(res.code == 200){
                     // console.log(res.data)
                     // console.log(res.data.roleCode)
@@ -116,12 +116,14 @@ export default {
                     sessionStorage.setItem('name',res.data.name);
                     sessionStorage.setItem('username',res.data.username);
                     sessionStorage.setItem('department',res.data.department);
+                    sessionStorage.setItem('departmentId',res.data.departmentId);
                     sessionStorage.setItem('jobTitle',res.data.jobTitle);
+                    sessionStorage.setItem('jobTitleCode',res.data.jobTitleCode);
                     sessionStorage.setItem('phone',res.data.phone);
                     // console.log(sessionStorage.name);
                     sessionStorage.setItem('roleCode',res.data.roleCode);  
                     sessionStorage.setItem('userId',res.data.userId);
-                    console.log(res.data.token);     
+                    // console.log(res.data.token);     
                     if(res.data.roleCode == "role_admin"){
                         this.$router.replace('/superIndex');
                     }

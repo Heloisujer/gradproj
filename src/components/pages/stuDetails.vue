@@ -54,6 +54,7 @@ export default {
                 name:sessionStorage.getItem("name"),
                 department:sessionStorage.getItem("department"),
                 phone:sessionStorage.getItem("phone"),
+                department_id:sessionStorage.getItem("departmentId"),
             },
             dialogEdit: false,
             formLabelWidth: '120px',
@@ -77,11 +78,12 @@ export default {
     },
     methods:{
         editStud() {
+            console.log(this.stuInfos.department)
+            console.log(this.stuInfos.department_id)
             this.dialogEdit = true;
             this.editform.username = this.stuInfos.username;
             this.editform.phone = this.stuInfos.phone;
             this.editform.name = this.stuInfos.name;
-            // this.editform.department_id = row.department_id;
             this.editform.department = this.stuInfos.department;
             // console.log(row.department)
             this.userId = sessionStorage.getItem("userId");
@@ -91,9 +93,9 @@ export default {
             let editform  = this.editform;
             let data = {
                 userId:this.userId,
-                // username:editform.username,
+                username:editform.username,
                 name:editform.name,
-                // departmentId:editform.department_id,
+                departmentId:this.stuInfos.department_id,
                 phone:editform.phone
             };
             this.$getData('post','/student/save',data,(res)=>{
