@@ -54,8 +54,8 @@ export default {
         return {
             //   isSubmin: false,
             ruleForm: {
-                username: 'admin',
-                password: 'pzhutopicsys12!@',
+                username: '',
+                password: '',
                 role:'',
                 code:''
             },
