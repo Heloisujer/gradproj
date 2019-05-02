@@ -73,7 +73,7 @@ export default {
         }
     },
     mounted(){
-        let names = sessionStorage.getItem('username');
+        let names = sessionStorage.getItem('name');
         if(names == null&&this.$route.name!=='登录'){
             alert('请登陆！');
             this.$router.push('/login');      

@@ -149,8 +149,8 @@ export default {
             },
             rules:{
                 username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { max:21, message: ' 21 个字符以内', trigger: 'blur' }
+                    { required: true, message: '请输入用户名！', trigger: 'blur' },
+                    { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' },
                 ],
                 name: [
                     { required: true, message: '请输入姓名', trigger: 'blur' },
