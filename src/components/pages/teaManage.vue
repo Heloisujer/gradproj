@@ -169,6 +169,9 @@ export default {
                 department_id: [
                     {  required: true, message: '请选择所属院系', trigger: 'change'},
                 ],
+                job_title_code: [
+                    {  required: true, message: '请选择导师职称', trigger: 'change'},
+                ],
             },
             pages:{
                 pageSize:10,
