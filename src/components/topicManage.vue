@@ -22,7 +22,7 @@
                 </el-table-column>
                 <el-table-column
                 prop="topic"
-                width="250px"
+                width="300px"
                 label="课题名称"
                 >
                 </el-table-column>
